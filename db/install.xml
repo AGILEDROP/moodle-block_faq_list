@@ -5,7 +5,7 @@
 >
     <TABLES>
 
-        <TABLE NAME="faq_list" COMMENT="FAQ list.">
+        <TABLE NAME="block_faq_list_faq_list" COMMENT="FAQ list.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
@@ -19,7 +19,7 @@
             </INDEXES>
         </TABLE>
 
-        <TABLE NAME="faq_list_title" COMMENT="Title translations for FAQ list.">
+        <TABLE NAME="block_faq_list_faq_list_title" COMMENT="Title translations for FAQ list.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="list_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>
@@ -34,7 +34,7 @@
             </INDEXES>
         </TABLE>
 
-        <TABLE NAME="faq_list_item" COMMENT="Questions and answers.">
+        <TABLE NAME="block_faq_list_faq_list_item" COMMENT="Questions and answers.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="list_id" TYPE="int" LENGTH="18" NOTNULL="true" SEQUENCE="false"/>

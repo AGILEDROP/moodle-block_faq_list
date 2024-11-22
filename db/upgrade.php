@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for block_faq_list
+ * Delete existing FAQ list.
  *
- * File         version.php
+ * File         faq_list_delete.php
  * Encoding     UTF-8
  *
  * @package     block_faq_list
@@ -29,10 +29,27 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin = new stdClass();
-$plugin->version      = 2024112200;
-$plugin->requires     = 2022041900;      // YYYYMMDDHH (This is the release version for Moodle 4.0).
-$plugin->component    = 'block_faq_list';
-$plugin->maturity     = MATURITY_STABLE;
-$plugin->release      = '1.0.0';
-$plugin->dependencies = [];
+function xmldb_block_faq_list_upgrade($oldversion): bool {
+    global $CFG, $DB;
+
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
+
+    if ($oldversion < 2024112200) {
+        $tablerenamings = [
+            'faq_list' => 'block_faq_list_faq_list',
+            'faq_list_title' => 'block_faq_list_faq_list_title',
+            'faq_list_item' => 'block_faq_list_faq_list_item',
+        ];
+
+        foreach ($tablerenamings as $oldname => $newname) {
+            if ($dbman->table_exists($oldname)) {
+                $oldnametable = new xmldb_table($oldname);
+                $dbman->rename_table($oldnametable, $newname);
+            }
+        }
+
+        upgrade_block_savepoint(true, 2024112200, 'faq_list');
+    }
+
+    return true;
+}
