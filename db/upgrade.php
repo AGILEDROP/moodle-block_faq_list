@@ -42,9 +42,10 @@ function xmldb_block_faq_list_upgrade($oldversion): bool {
         ];
 
         foreach ($tablerenamings as $oldname => $newname) {
-            if ($dbman->table_exists($oldname)) {
+            if ($dbman->table_exists($oldname) && !$dbman->table_exists($newname)) {
                 $oldnametable = new xmldb_table($oldname);
                 $dbman->rename_table($oldnametable, $newname);
+                $DB->reset_caches();
             }
         }
 
