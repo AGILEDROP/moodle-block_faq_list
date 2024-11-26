@@ -41,7 +41,7 @@ require_login();
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('admin');
 
-$header = get_string('header:faq_list', 'block_faq_list');
+$header = get_string('header:faqlist', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 
@@ -51,9 +51,9 @@ $faqlist = new faq_list();
 $table = new html_table();
 
 $table->head = [
-    get_string('label:col_shortname', 'block_faq_list'),
-    get_string('label:col_action_edit', 'block_faq_list'),
-    get_string('label:col_action_delete', 'block_faq_list'),
+    get_string('label:colshortname', 'block_faq_list'),
+    get_string('label:colactionedit', 'block_faq_list'),
+    get_string('label:colactiondelete', 'block_faq_list'),
 ];
 
 $tablerows = [];
@@ -71,7 +71,7 @@ foreach ($records as $record) {
     $editlink = new moodle_url('/blocks/faq_list/view/faq_list_manage.php', $urlparams);
     $editicon = $OUTPUT->action_icon(
             $editlink,
-            new \pix_icon('t/edit', get_string('button:edit_faq_list', 'block_faq_list'))
+            new \pix_icon('t/edit', get_string('button:editfaqlist', 'block_faq_list'))
     );
 
     // Link to delete faq list.
@@ -96,6 +96,6 @@ $table->data = $tablerows;
 echo html_writer::table($table);
 
 $urlaction = new moodle_url('/blocks/faq_list/view/faq_list_manage.php');
-echo $OUTPUT->single_button($urlaction, get_string('header:faq_list_add', 'block_faq_list'), 'POST', ['type' => 'primary']);
+echo $OUTPUT->single_button($urlaction, get_string('header:faqlistadd', 'block_faq_list'), 'POST', ['type' => 'primary']);
 
 echo $OUTPUT->footer();

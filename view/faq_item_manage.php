@@ -49,7 +49,7 @@ $faqitemform = new faq_item_form();
 
 $faqitemid = optional_param('faq_item_id', null, PARAM_INT);
 
-$header = get_string('header:faq_item_add', 'block_faq_list');
+$header = get_string('header:faqitemadd', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 
@@ -64,13 +64,13 @@ if ($faqitemform->is_cancelled()) {
     if ($data->id) {
         $faqitem->update($data);
         redirect($redirecturl,
-            get_string('msg_faq_item_updated', 'block_faq_list'),
+            get_string('msgfaqitemupdated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     } else {
         $faqitem->create($data);
         redirect($redirecturl,
-            get_string('msg_faq_item_created', 'block_faq_list'),
+            get_string('msgfaqitemcreated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     }
@@ -89,7 +89,7 @@ if ($faqitemid) {
         $faqitemform->set_data($data);
     } else {
         redirect($redirecturl,
-            get_string('msg_faq_item_not_exist', 'block_faq_list'),
+            get_string('msgfaqitemnotexist', 'block_faq_list'),
             0,
             notification::NOTIFY_ERROR
         );

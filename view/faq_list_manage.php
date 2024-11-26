@@ -51,7 +51,7 @@ $faqlistform = new faq_list_form();
 $action = optional_param('action', null, PARAM_ALPHA);
 $faqlistid = optional_param('list_id', null, PARAM_INT);
 
-$header = get_string('header:faq_list_add', 'block_faq_list');
+$header = get_string('header:faqlistadd', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 
@@ -66,13 +66,13 @@ if ($faqlistform->is_cancelled()) {
     if ($data->id) {
         $faqlist->update($data);
         redirect($redirecturl,
-            get_string('msg_faq_list_updated', 'block_faq_list'),
+            get_string('msgfaqlistupdated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     } else {
         $faqlist->create($data);
         redirect($redirecturl,
-            get_string('msg_faq_list_created', 'block_faq_list'),
+            get_string('msgfaqlistcreated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     }
@@ -86,7 +86,7 @@ if ($faqlistid) {
         $faqlistform->set_data($existingfaqlist);
     } else {
         redirect($redirecturl,
-            get_string('msg_faq_list_not_exist', 'block_faq_list'),
+            get_string('msgfaqlistnotexist', 'block_faq_list'),
             0,
             notification::NOTIFY_ERROR
         );

@@ -65,18 +65,18 @@ if ($data = $faqlistdeleteform->get_data()) {
     if ($data->id) {
         $faqlist->delete($data->id);
         redirect($redirecturl,
-            get_string('msg_faq_list_deleted', 'block_faq_list'),
+            get_string('msgfaqlistdeleted', 'block_faq_list'),
             0,
             'info');
     } else {
         redirect($redirecturl,
-            get_string('msg_faq_list_not_exist', 'block_faq_list'),
+            get_string('msgfaqlistnotexist', 'block_faq_list'),
             0,
             'error');
     }
 }
 
-$header = get_string('header:faq_list_delete', 'block_faq_list');
+$header = get_string('header:faqlistdelete', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 

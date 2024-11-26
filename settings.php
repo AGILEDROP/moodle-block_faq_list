@@ -35,15 +35,15 @@ global $ADMIN;
 
 if ($hassiteconfig) {
 
-    $ADMIN->add('root', new admin_category('block_faq_list', get_string('admin:faq_category_title', 'block_faq_list')));
+    $ADMIN->add('root', new admin_category('block_faq_list', get_string('admin:faqcategorytitle', 'block_faq_list')));
 
     $ADMIN->add('block_faq_list',
         new admin_externalpage('faq_list',
-        get_string('admin:faq_manage_list', 'block_faq_list'),
+        get_string('admin:faqmanagelist', 'block_faq_list'),
         new moodle_url('/blocks/faq_list/view/faq_lists.php')));
 
     $ADMIN->add('block_faq_list',
         new admin_externalpage('faq_list_items',
-            get_string('admin:faq_manage_item', 'block_faq_list'),
+            get_string('admin:faqmanageitem', 'block_faq_list'),
             new moodle_url('/blocks/faq_list/view/faq_list_items.php')));
 }
