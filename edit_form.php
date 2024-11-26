@@ -48,10 +48,10 @@ class block_faq_list_edit_form extends block_edit_form {
         $availablefaqlists = $faqlist->get_available_faq_list_dropdown_options();
         $mform->addElement('select',
                 'config_faq_list_id',
-                get_string('label:config_faq_list_id', 'block_faq_list'),
+                get_string('label:configfaqlistid', 'block_faq_list'),
                 $availablefaqlists,
         );
-        $mform->addHelpButton('config_faq_list_id', 'label:config_faq_list_id', 'block_faq_list');
+        $mform->addHelpButton('config_faq_list_id', 'label:configfaqlistid', 'block_faq_list');
         $mform->setType('config_faq_list_id', PARAM_ALPHANUM);
         $mform->addRule('config_faq_list_id', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         if (isset($this->block->config->faq_list_id)) {
@@ -60,16 +60,16 @@ class block_faq_list_edit_form extends block_edit_form {
 
         // Block title display.
         $availableblocktitles = [
-                'none' => get_string('label:config_block_title_none', 'block_faq_list'),
-                'pluginname' => get_string('label:config_block_title_pluginname', 'block_faq_list'),
-                'faqlisttitle' => get_string('label:config_block_title_faq', 'block_faq_list'),
+                'none' => get_string('label:configblocktitlenone', 'block_faq_list'),
+                'pluginname' => get_string('label:configblocktitlepluginname', 'block_faq_list'),
+                'faqlisttitle' => get_string('label:configblocktitlefaq', 'block_faq_list'),
         ];
         $mform->addElement('select',
                 'config_block_title',
-                get_string('label:config_block_title', 'block_faq_list'),
+                get_string('label:configblocktitle', 'block_faq_list'),
                 $availableblocktitles,
         );
-        $mform->addHelpButton('config_block_title', 'label:config_block_title', 'block_faq_list');
+        $mform->addHelpButton('config_block_title', 'label:configblocktitle', 'block_faq_list');
         $mform->setType('config_block_title', PARAM_ALPHANUM);
         $mform->addRule('config_block_title', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         if (isset($this->block->config->block_title)) {
@@ -79,8 +79,8 @@ class block_faq_list_edit_form extends block_edit_form {
         }
 
         // FAQ list title.
-        $mform->addElement('selectyesno', 'config_show_faq_title', get_string('label:config_show_faq_title', 'block_faq_list'));
-        $mform->addHelpButton('config_show_faq_title', 'label:config_show_faq_title', 'block_faq_list');
+        $mform->addElement('selectyesno', 'config_show_faq_title', get_string('label:configshowfaqtitle', 'block_faq_list'));
+        $mform->addHelpButton('config_show_faq_title', 'label:configshowfaqtitle', 'block_faq_list');
         $mform->setType('config_show_faq_title', PARAM_ALPHANUM);
         $mform->addRule('config_show_faq_title', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         if (isset($this->block->config->show_faq_title)) {
@@ -97,7 +97,7 @@ class block_faq_list_edit_form extends block_edit_form {
         ];
         $mform->addElement('select',
                 'config_display_type',
-                get_string('label:config_display_type', 'block_faq_list'),
+                get_string('label:configdisplaytype', 'block_faq_list'),
                 $displayoptions
         );
         $mform->setType('config_display_type', PARAM_ALPHANUMEXT);

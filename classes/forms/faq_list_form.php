@@ -48,11 +48,11 @@ class faq_list_form extends moodleform {
         $mform->setType('id', PARAM_INT);
 
         // Shortname.
-        $mform->addElement('text', 'shortname', get_string('label:faq_list_shortname', 'block_faq_list'));
+        $mform->addElement('text', 'shortname', get_string('label:faqlistshortname', 'block_faq_list'));
         $mform->addRule('shortname', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->addRule('shortname', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->setType('shortname', PARAM_ALPHANUMEXT);
-        $mform->addHelpButton('shortname', 'label:faq_list_shortname', 'block_faq_list');
+        $mform->addHelpButton('shortname', 'label:faqlistshortname', 'block_faq_list');
 
         $this->add_action_buttons();
     }
