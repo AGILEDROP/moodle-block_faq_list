@@ -79,7 +79,7 @@ foreach ($records as $record) {
     $deletelink = new moodle_url('/blocks/faq_list/view/faq_list_delete.php', $params);
     $deleteicon = $OUTPUT->action_icon(
             $deletelink,
-            new \pix_icon('t/delete', get_string('button:delete_faq_list', 'block_faq_list'))
+            new \pix_icon('t/delete', get_string('button:deletefaqlist', 'block_faq_list'))
     );
 
     // Build table row.
