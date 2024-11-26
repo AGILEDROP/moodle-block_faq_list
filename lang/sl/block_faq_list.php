@@ -67,27 +67,27 @@ $string['label:colshortname'] = 'Kratko ime';
 
 $string['label:configblocktitle'] = 'Prikaži naslov bloka';
 $string['label:configblocktitlefaq'] = 'Prikaži ime bloka kot naslov izbranega seznama pogostih vprašanj.';
-$string['label:configblocktitlehelp'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
+$string['label:configblocktitle_help'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
 $string['label:configblocktitlenone'] = 'Nič - skrij naslov bloka';
 $string['label:configblocktitlepluginname'] = 'Prikaži naslov bloka kot ime vtičnika';
 $string['label:configdisplaytype'] = 'Prikaži seznam pogostih vprašanj kot';
 $string['label:configfaqlistid'] = 'Seznam pogostih vprašanj';
-$string['label:configfaqlistidhelp'] = 'Izberi kateri seznam pogostih vprašanj bo prikazan.';
+$string['label:configfaqlistid_help'] = 'Izberi kateri seznam pogostih vprašanj bo prikazan.';
 $string['label:configshowfaqtitle'] = 'Prikaži naslov seznama pogostih vprašanj';
-$string['label:configshowfaqtitlehelp'] = 'Prikaži naslov seznama pogostih vprašanj ali ne. Če ne pazimo, lahko prikažemo enak naslov dvakrat.';
+$string['label:configshowfaqtitle_help'] = 'Prikaži naslov seznama pogostih vprašanj ali ne. Če ne pazimo, lahko prikažemo enak naslov dvakrat.';
 
 $string['label:faqanswer'] = 'Odgovor';
-$string['label:faqanswerhelp'] = 'Napišite besedilo za odgovor.';
+$string['label:faqanswer_help'] = 'Napišite besedilo za odgovor.';
 $string['label:faqitemdeletequestion'] = 'Ali želite izbrisati element seznama pogostih vprašanj?';
 $string['label:faqlistdeletequestion'] = 'Ali želite izbrisati seznam pogostih vprašanj?';
 $string['label:faqlistdescription'] = 'Opis';
-$string['label:faqlistdescriptionhelp'] = 'Kratek opis';
+$string['label:faqlistdescription_help'] = 'Kratek opis';
 $string['label:faqlistshortname'] = 'Unikatno kratko ime';
-$string['label:faqlistshortnamehelp'] = 'Vnesi unikatno ime. Dovoljeni znaki so: [0-9][A-Z][a-z][_]';
+$string['label:faqlistshortname_help'] = 'Vnesi unikatno ime. Dovoljeni znaki so: [0-9][A-Z][a-z][_]';
 $string['label:faqquestion'] = 'Vprašanje';
-$string['label:faqquestionhelp'] = 'Napišite besedilo za vprašanje.';
+$string['label:faqquestion_help'] = 'Napišite besedilo za vprašanje.';
 $string['label:faqtitle'] = 'Prevod naslova seznama pogostih vprašanj';
-$string['label:faqtitlehelp'] = 'Vnesite preveden naslov za izbran seznam pogostih vprašanj.';
+$string['label:faqtitle_help'] = 'Vnesite preveden naslov za izbran seznam pogostih vprašanj.';
 
 $string['msgfaqitemcreated'] = 'Vprašanje in odgovor je bil uspešno ustvarjen.';
 $string['msgfaqitemdeleted'] = 'Vprašanje in odgovor je bil uspešno izbrisan.';
