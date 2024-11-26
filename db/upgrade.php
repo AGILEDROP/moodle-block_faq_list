@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Delete existing FAQ list.
+ * Upgrade definitions for the FAQ List module.
  *
- * File         faq_list_delete.php
+ * File         upgrade.php
  * Encoding     UTF-8
  *
  * @package     block_faq_list
