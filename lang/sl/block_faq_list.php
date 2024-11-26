@@ -27,101 +27,85 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Capabilities.
+$string['admin:faqcategorytitle'] = 'Seznam seznamov pogostih vprašanj';
+$string['admin:faqmanageitem'] = 'Upravljanje';
+$string['admin:faqmanagelist'] = 'Upravljanje seznama pogostih vprašanj';
 
-
-// DEFAULT.
 $string['blockname'] = 'Seznam pogostih vprašanj';
-$string['pluginname'] = 'Seznam pogostih vprašanj';
 
-// Headers.
-$string['header:faq_list'] = 'Seznam pogostih vprašanj';
-$string['header:faq_list_add'] = 'Ustvari nov seznam pogostih vprašanj';
-$string['header:faq_list_edit'] = 'Upravljaj s seznamom pogostih vprašanj';
-$string['header:faq_list_delete'] = 'Izbriši seznam pogostih vprašanj';
-$string['header:faq_item_list'] = 'Seznam vprašanj in odgovorov';
-$string['header:faq_item_add'] = 'Ustvari nov seznam pogostih vprašanj';
-$string['header:faq_item_edit'] = 'Urejaj vprašanje';
-$string['header:faq_item_delete'] = 'Izbriši vprašanje';
-$string['header:faq_title_management'] = 'Prevod naslova seznama pogostih vprašanj';
-$string['header:faq_title'] = 'Naslov';
+$string['button:addfaqitem'] = 'Dodaj novo vprašanje';
+$string['button:addfaqtitle'] = 'Ustvari prevod naslova';
+$string['button:backtofaqlist'] = 'Nazaj na spisek seznamov pogostih vprašanj';
+$string['button:deletefaqitem'] = 'Izbriši';
+$string['button:deletefaqlist'] = 'Izbriši';
+$string['button:editfaqitem'] = 'Uredi';
+$string['button:editfaqlist'] = 'Uredi';
+$string['button:editfaqtitle'] = 'Uredi prevod naslova';
 
-// Success strings.
-
-
-// URL texts.
-$string['admin:faq_category_title'] = 'Seznam seznamov pogostih vprašanj';
-$string['admin:faq_manage_list'] = 'Upravljanje seznama pogostih vprašanj';
-$string['admin:faq_manage_item'] = 'Upravljanje';
-$string['tab_faq_list'] = 'Seznam seznamov pogostih vprašanj';
-$string['tab_faq_list_title'] = 'Seznam vseh seznamov pogostih vprašanj';
-$string['tab_faq_list_add'] = 'Ustvari nov seznam pogostih vprašanj';
-$string['tab_faq_list_add_title'] = 'Ustvari nov seznam pogostih vprašanj ali urejaj Create new FAQ list or edit existing one';
-
-
-// Form Labels.
-$string['label:config_faq_list_id'] = 'Seznam pogostih vprašanj';
-$string['label:config_faq_list_id_help'] = 'Izberi kateri seznam pogostih vprašanj bo prikazan.';
-
-$string['label:config_block_title'] = 'Prikaži naslov bloka';
-$string['label:config_block_title_help'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
-$string['label:config_block_title_none'] = 'Nič - skrij naslov bloka';
-$string['label:config_block_title_pluginname'] = 'Prikaži naslov bloka kot ime vtičnika';
-$string['label:config_block_title_faq'] = 'Prikaži ime bloka kot naslov izbranega seznama pogostih vprašanj.';
-
-$string['label:config_show_faq_title'] = 'Prikaži naslov seznama pogostih vprašanj';
-$string['label:config_show_faq_title_help'] = 'Prikaži naslov seznama pogostih vprašanj ali ne. Če ne pazimo, lahko prikažemo enak naslov dvakrat.';
-
-$string['label:config_display_type'] = 'Prikaži seznam pogostih vprašanj kot';
-$string['label:faq_list_shortname'] = 'Unikatno kratko ime';
-$string['label:faq_list_shortname_help'] = 'Vnesi unikatno ime. Dovoljeni znaki so: [0-9][A-Z][a-z][_]';
-$string['label:faq_list_description'] = 'Opis';
-$string['label:faq_list_description_help'] = 'Kratek opis';
-$string['label:faq_list_delete_question'] = 'Ali želite izbrisati seznam pogostih vprašanj?';
-$string['label:faq_item_delete_question'] = 'Ali želite izbrisati element seznama pogostih vprašanj?';
-$string['label:faq_question'] = 'Vprašanje';
-$string['label:faq_question_help'] = 'Napišite besedilo za vprašanje.';
-$string['label:faq_answer'] = 'Odgovor';
-$string['label:faq_answer_help'] = 'Napišite besedilo za odgovor.';
-$string['label:faq_title'] = 'Prevod naslova seznama pogostih vprašanj';
-$string['label:faq_title_help'] = 'Vnesite preveden naslov za izbran seznam pogostih vprašanj.';
-
-// Errors.
 $string['error:required'] = 'To polje je obvezno.';
 $string['error:unique'] = 'To kratko ime že obstaja.';
 
-// Buttons.
-$string['button:delete_faq_list'] = 'Izbriši';
-$string['button:edit_faq_list'] = 'Uredi';
-$string['button:back_to_faq_list'] = 'Nazaj na spisek seznamov pogostih vprašanj';
-$string['button:add_faq_title'] = 'Ustvari prevod naslova';
-$string['button:edit_faq_title'] = 'Uredi prevod naslova';
-$string['button:add_faq_item'] = 'Dodaj novo vprašanje';
-$string['button:delete_faq_item'] = 'Izbriši';
-$string['button:edit_faq_item'] = 'Uredi';
+$string['faq_list:addinstance'] = 'Dodaj instanco';
+$string['faq_list:myaddinstance'] = 'Dodaj lastno instanco';
 
-// Tables.
-$string['label:col_shortname'] = 'Kratko ime';
-$string['label:col_description'] = 'Opis';
-$string['label:col_action_edit'] = 'Uredi';
-$string['label:col_action_delete'] = 'Izbriši';
-$string['label:col_faq_item'] = 'Vprašanje in odgovor';
+$string['header:faqitemadd'] = 'Ustvari nov seznam pogostih vprašanj';
+$string['header:faqitemdelete'] = 'Izbriši vprašanje';
+$string['header:faqitemedit'] = 'Urejaj vprašanje';
+$string['header:faqitemlist'] = 'Seznam vprašanj in odgovorov';
+$string['header:faqlist'] = 'Seznam pogostih vprašanj';
+$string['header:faqlistadd'] = 'Ustvari nov seznam pogostih vprašanj';
+$string['header:faqlistdelete'] = 'Izbriši seznam pogostih vprašanj';
+$string['header:faqlistedit'] = 'Upravljaj s seznamom pogostih vprašanj';
+$string['header:faqtitle'] = 'Naslov';
+$string['header:faqtitlemanagement'] = 'Prevod naslova seznama pogostih vprašanj';
 
-// Messages.
-$string['msg_faq_list_created'] = 'Seznam pogostih vprašanj je bil uspešno ustvarjen.';
-$string['msg_faq_list_updated'] = 'Seznam pogostih vprašanj je bil uspešno posodobljen.';
-$string['msg_faq_list_deleted'] = 'Seznam pogostih vprašanj je bil uspešno izbrisan.';
-$string['msg_faq_list_not_exist'] = 'Seznam pogostih vprašanj ne obstaja.';
-$string['msg_faq_title_created'] = 'Naslov seznama pogostih vprašanj uspešno narejen.';
-$string['msg_faq_title_updated'] = 'Naslov seznama pogostih vprašanj uspešno posodobljen.';
-$string['msg_faq_title_not_exist'] = 'Naslov seznama pogostih vprašanj ne obstaja.';
-$string['msg_faq_item_created'] = 'Vprašanje in odgovor je bil uspešno ustvarjen.';
-$string['msg_faq_item_updated'] = 'Vprašanje in odgovor je bil uspešno posodobljen.';
-$string['msg_faq_item_deleted'] = 'Vprašanje in odgovor je bil uspešno izbrisan.';
-$string['msg_faq_item_not_exist'] = 'Vprašanje ne obstaja.';
+$string['label:colactiondelete'] = 'Izbriši';
+$string['label:colactionedit'] = 'Uredi';
+$string['label:coldescription'] = 'Opis';
+$string['label:colfaqitem'] = 'Vprašanje in odgovor';
+$string['label:colshortname'] = 'Kratko ime';
 
-// View strings.
+$string['label:configblocktitle'] = 'Prikaži naslov bloka';
+$string['label:configblocktitlefaq'] = 'Prikaži ime bloka kot naslov izbranega seznama pogostih vprašanj.';
+$string['label:configblocktitlehelp'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
+$string['label:configblocktitlenone'] = 'Nič - skrij naslov bloka';
+$string['label:configblocktitlepluginname'] = 'Prikaži naslov bloka kot ime vtičnika';
+$string['label:configdisplaytype'] = 'Prikaži seznam pogostih vprašanj kot';
+$string['label:configfaqlistid'] = 'Seznam pogostih vprašanj';
+$string['label:configfaqlistidhelp'] = 'Izberi kateri seznam pogostih vprašanj bo prikazan.';
+$string['label:configshowfaqtitle'] = 'Prikaži naslov seznama pogostih vprašanj';
+$string['label:configshowfaqtitlehelp'] = 'Prikaži naslov seznama pogostih vprašanj ali ne. Če ne pazimo, lahko prikažemo enak naslov dvakrat.';
 
+$string['label:faqanswer'] = 'Odgovor';
+$string['label:faqanswerhelp'] = 'Napišite besedilo za odgovor.';
+$string['label:faqitemdeletequestion'] = 'Ali želite izbrisati element seznama pogostih vprašanj?';
+$string['label:faqlistdeletequestion'] = 'Ali želite izbrisati seznam pogostih vprašanj?';
+$string['label:faqlistdescription'] = 'Opis';
+$string['label:faqlistdescriptionhelp'] = 'Kratek opis';
+$string['label:faqlistshortname'] = 'Unikatno kratko ime';
+$string['label:faqlistshortnamehelp'] = 'Vnesi unikatno ime. Dovoljeni znaki so: [0-9][A-Z][a-z][_]';
+$string['label:faqquestion'] = 'Vprašanje';
+$string['label:faqquestionhelp'] = 'Napišite besedilo za vprašanje.';
+$string['label:faqtitle'] = 'Prevod naslova seznama pogostih vprašanj';
+$string['label:faqtitlehelp'] = 'Vnesite preveden naslov za izbran seznam pogostih vprašanj.';
 
-// Privacy.
+$string['msgfaqitemcreated'] = 'Vprašanje in odgovor je bil uspešno ustvarjen.';
+$string['msgfaqitemdeleted'] = 'Vprašanje in odgovor je bil uspešno izbrisan.';
+$string['msgfaqitemnotexist'] = 'Vprašanje ne obstaja.';
+$string['msgfaqitemupdated'] = 'Vprašanje in odgovor je bil uspešno posodobljen.';
+$string['msgfaqlistcreated'] = 'Seznam pogostih vprašanj je bil uspešno ustvarjen.';
+$string['msgfaqlistdeleted'] = 'Seznam pogostih vprašanj je bil uspešno izbrisan.';
+$string['msgfaqlistnotexist'] = 'Seznam pogostih vprašanj ne obstaja.';
+$string['msgfaqlistupdated'] = 'Seznam pogostih vprašanj je bil uspešno posodobljen.';
+$string['msgfaqtitlecreated'] = 'Naslov seznama pogostih vprašanj uspešno narejen.';
+$string['msgfaqtitlenotexist'] = 'Naslov seznama pogostih vprašanj ne obstaja.';
+$string['msgfaqtitleupdated'] = 'Naslov seznama pogostih vprašanj uspešno posodobljen.';
+
+$string['pluginname'] = 'Seznam pogostih vprašanj';
+
 $string['privacy:metadata'] = 'Vtičnik seznam pogostih vprašanj ne shranjuje nobenih osebnih uporabnikovih podatkov.';
+
+$string['tabfaqlist'] = 'Seznam seznamov pogostih vprašanj';
+$string['tabfaqlistadd'] = 'Ustvari nov seznam pogostih vprašanj';
+$string['tabfaqlistaddtitle'] = 'Ustvari nov seznam pogostih vprašanj ali urejaj Create new FAQ list or edit existing one';
+$string['tabfaqlisttitle'] = 'Seznam vseh seznamov pogostih vprašanj';
