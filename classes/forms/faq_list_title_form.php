@@ -47,11 +47,11 @@ class faq_list_title_form extends moodleform {
         $mform->setType('id', PARAM_INT);
 
         // Translated title.
-        $mform->addElement('text', 'title', get_string('label:faq_title', 'block_faq_list'));
+        $mform->addElement('text', 'title', get_string('label:faqtitle', 'block_faq_list'));
         $mform->addRule('title', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->addRule('title', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->setType('title', PARAM_TEXT);
-        $mform->addHelpButton('title', 'label:faq_title', 'block_faq_list');
+        $mform->addHelpButton('title', 'label:faqtitle', 'block_faq_list');
 
         $this->add_action_buttons();
     }

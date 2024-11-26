@@ -43,14 +43,14 @@ class faq_item_delete_form extends moodleform {
         $mform = $this->_form;
 
         // Header - question to delete.
-        $mform->addElement('header', 'deletequestion', get_string('label:faq_item_delete_question', 'block_faq_list'));
+        $mform->addElement('header', 'deletequestion', get_string('label:faqitemdeletequestion', 'block_faq_list'));
 
         $mform->addElement('hidden', 'id', 0);
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('static', 'question');
 
-        $this->add_action_buttons(true, get_string('button:delete_faq_list', 'block_faq_list'));
+        $this->add_action_buttons(true, get_string('button:deletefaqlist', 'block_faq_list'));
     }
 
     /**

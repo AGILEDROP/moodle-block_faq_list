@@ -49,7 +49,7 @@ $faqtitleform = new faq_list_title_form();
 
 $faqtitleid = optional_param('faq_title_id', null, PARAM_INT);
 
-$header = get_string('header:faq_title_management', 'block_faq_list');
+$header = get_string('header:faqtitlemanagement', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 
@@ -64,13 +64,13 @@ if ($faqtitleform->is_cancelled()) {
     if ($data->id) {
         $faqlist->update_title_translation($data->id, $data->title);
         redirect($redirecturl,
-            get_string('msg_faq_title_updated', 'block_faq_list'),
+            get_string('msgfaqtitleupdated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     } else {
         $faqlist->add_title_translation($faqlist->helper->get_last_edit_faq_list_id(), $data->title);
         redirect($redirecturl,
-            get_string('msg_faq_title_created', 'block_faq_list'),
+            get_string('msgfaqtitlecreated', 'block_faq_list'),
             0,
             notification::NOTIFY_SUCCESS);
     }
@@ -87,7 +87,7 @@ if ($faqtitleid) {
         $faqtitleform->set_data($data);
     } else {
         redirect($redirecturl,
-            get_string('msg_faq_title_not_exist', 'block_faq_list'),
+            get_string('msgfaqtitlenotexist', 'block_faq_list'),
             0,
             notification::NOTIFY_ERROR
         );

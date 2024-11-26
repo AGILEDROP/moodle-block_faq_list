@@ -47,11 +47,11 @@ class faq_item_form extends moodleform {
         $mform->setType('id', PARAM_INT);
 
         // Question.
-        $mform->addElement('text', 'question', get_string('label:faq_question', 'block_faq_list'));
+        $mform->addElement('text', 'question', get_string('label:faqquestion', 'block_faq_list'));
         $mform->addRule('question', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->addRule('question', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->setType('question', PARAM_TEXT);
-        $mform->addHelpButton('question', 'label:faq_question', 'block_faq_list');
+        $mform->addHelpButton('question', 'label:faqquestion', 'block_faq_list');
 
         // Answer.
         $editordefinition = [
@@ -64,11 +64,11 @@ class faq_item_form extends moodleform {
             'trusttext' => 0,
             'enable_filemanagement' => true,
         ];
-        $mform->addElement('editor', 'answer', get_string('label:faq_answer', 'block_faq_list'), null, $editordefinition);
+        $mform->addElement('editor', 'answer', get_string('label:faqanswer', 'block_faq_list'), null, $editordefinition);
         $mform->setType('answer', PARAM_RAW);
         $mform->addRule('answer', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
         $mform->addRule('answer', get_string('error:required', 'block_faq_list'), 'required', null, 'client');
-        $mform->addHelpButton('answer', 'label:faq_answer', 'block_faq_list');
+        $mform->addHelpButton('answer', 'label:faqanswer', 'block_faq_list');
 
         $this->add_action_buttons();
     }
