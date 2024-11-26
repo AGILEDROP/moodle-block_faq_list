@@ -1,35 +1,35 @@
-.faq-wrapper p:last-child,
-.faq-wrapper ul:last-child,
-.faq-wrapper ol:last-child {
+.block_faq_list .faq-wrapper p:last-child,
+.block_faq_list .faq-wrapper ul:last-child,
+.block_faq_list .faq-wrapper ol:last-child {
   margin-bottom: 0;
 }
 
 /* Accordion view mode styles. */
-.accordion-item {
+.block_faq_list .accordion-item {
   margin-bottom: 1rem;
 }
 
-.accordion-item:last-child {
+.block_faq_list .accordion-item:last-child {
   margin-bottom: 0;
 }
 
-.accordion-header {
+.block_faq_list .accordion-header {
   position: relative;
   font-size: 1rem;
 }
 
-.accordion-header button .fa {
+.block_faq_list .accordion-header button .fa {
   position: absolute;
   top: calc(50% - .5em);
   right: 1rem;
   transition: transform ease .3s;
 }
 
-.accordion-header button:not(.collapsed) .fa {
+.block_faq_list .accordion-header button:not(.collapsed) .fa {
   transform: rotate(180deg);
 }
 
-.accordion-header button {
+.block_faq_list .accordion-header button {
   display: block;
   background: none;
   padding: 0;
@@ -37,6 +37,6 @@
 }
 
 /* Slider view mode styles. */
-.faq-wrapper .carousel-indicators li {
+.block_faq_list .faq-wrapper .carousel-indicators li {
   background-color: #000;
 }
