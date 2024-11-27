@@ -34,11 +34,11 @@ function xmldb_block_faq_list_upgrade($oldversion): bool {
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
-    if ($oldversion < 2024112200) {
+    if ($oldversion < 2024112700) {
         $tablerenamings = [
-            'faq_list' => 'block_faq_list_faq_list',
-            'faq_list_title' => 'block_faq_list_faq_list_title',
-            'faq_list_item' => 'block_faq_list_faq_list_item',
+            'faq_list' => 'block_faq_list_list',
+            'faq_list_title' => 'block_faq_list_title',
+            'faq_list_item' => 'block_faq_list_item',
         ];
 
         foreach ($tablerenamings as $oldname => $newname) {
@@ -49,7 +49,7 @@ function xmldb_block_faq_list_upgrade($oldversion): bool {
             }
         }
 
-        upgrade_block_savepoint(true, 2024112200, 'faq_list');
+        upgrade_block_savepoint(true, 2024112700, 'faq_list');
     }
 
     return true;
