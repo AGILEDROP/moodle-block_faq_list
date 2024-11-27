@@ -55,9 +55,9 @@ class faq_list {
         global $DB;
         $this->db = $DB;
         $this->helper = new helper();
-        $this->tablelists = 'faq_list';
-        $this->tabletitles = 'faq_list_title';
-        $this->tableitems = 'faq_list_item';
+        $this->tablelists = 'block_faq_list_list';
+        $this->tabletitles = 'block_faq_list_title';
+        $this->tableitems = 'block_faq_list_item';
     }
 
     /**
