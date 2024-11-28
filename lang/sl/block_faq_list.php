@@ -47,6 +47,9 @@ $string['error:unique'] = 'To kratko ime že obstaja.';
 
 $string['faq_list:addinstance'] = 'Dodaj instanco';
 $string['faq_list:myaddinstance'] = 'Dodaj lastno instanco';
+$string['faq_list:createormodify'] = 'Ustvari ali uredi sezname pogostih vprašanj';
+$string['faq_list:delete'] = 'Izbriši sezname pogostih vprašanj';
+$string['faq_list:read'] = 'Pregleduj sezname pogostih vprašanj';
 
 $string['header:faqitemadd'] = 'Ustvari nov seznam pogostih vprašanj';
 $string['header:faqitemdelete'] = 'Izbriši vprašanje';
