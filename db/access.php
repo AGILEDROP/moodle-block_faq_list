@@ -35,20 +35,50 @@ $capabilities = [
         'archetypes' => [
             'user' => CAP_ALLOW,
         ],
-
         'clonepermissionsfrom' => 'moodle/my:manageblocks',
     ],
 
     'block/faq_list:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
-
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => [
-            'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
         ],
-
         'clonepermissionsfrom' => 'moodle/site:manageblocks',
+    ],
+
+    'block/faq_list:read' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/faq_list:addinstance',
+    ],
+
+    'block/faq_list:createormodify' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/faq_list:addinstance',
+    ],
+
+    'block/faq_list:delete' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'block/faq_list:addinstance',
     ],
 ];

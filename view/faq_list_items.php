@@ -37,7 +37,11 @@ global $CFG, $USER, $DB, $OUTPUT, $PAGE;
 
 $PAGE->set_url('/blocks/faq_list/view/faq_list_items.php');
 
-require_login();
+require_login(0, false);
+
+$context = \context_system::instance();
+require_capability('block/faq_list:read', $context);
+
 $PAGE->set_context(context_system::instance());
 
 $faqitem = new faq_item();
