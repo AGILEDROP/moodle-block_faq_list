@@ -42,7 +42,7 @@ $PAGE->set_url('/blocks/faq_list/view/faq_list_title.php');
 require_login(0, false);
 
 $context = \context_system::instance();
-require_capability('block/faq_list:read', $context);
+require_capability('block/faq_list:createormodify', $context);
 
 $PAGE->set_context(context_system::instance());
 
