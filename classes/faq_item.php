@@ -88,6 +88,8 @@ class faq_item extends faq_list {
      * @throws dml_exception
      */
     public function create($data) {
+        require_sesskey();
+
         $faqlistid = $this->helper->get_last_edit_faq_list_id();
         $faqlang = $this->helper->get_last_edit_faq_lang();
         $itemcount = $this->count_items($faqlistid, $faqlang);
@@ -110,6 +112,8 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function update($data) {
+        require_sesskey();
+
         $faqitemdata = new stdClass();
         $faqitemdata->id = $data->id;
         $faqitemdata->question = $data->question;
@@ -126,6 +130,8 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function delete($faqitemid) {
+        require_sesskey();
+
         $faqitem = $this->get_by_id($faqitemid);
         $sortorder = $faqitem->sortorder;
 
@@ -147,6 +153,8 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function movedown($faqitemid) {
+        require_sesskey();
+
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;
         $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
@@ -168,6 +176,8 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function moveup($faqitemid) {
+        require_sesskey();
+
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;
         $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
