@@ -47,6 +47,9 @@ $string['error:unique'] = 'This shortname already exist.';
 
 $string['faq_list:addinstance'] = 'Add instance';
 $string['faq_list:myaddinstance'] = 'Add own instance';
+$string['faq_list:createormodify'] = 'Create or modify FAQ lists and items';
+$string['faq_list:delete'] = 'Delete FAQ lists and items';
+$string['faq_list:read'] = 'See FAQ lists and items';
 
 $string['header:faqitemadd'] = 'Create new Question';
 $string['header:faqitemdelete'] = 'Delete Question';
