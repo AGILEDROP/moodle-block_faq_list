@@ -30,7 +30,7 @@
 /**
  * Rename the database tables to add prefix.
  *
- * @param $oldversion
+ * @param int $oldversion
  * @return bool
  * @throws ddl_exception
  * @throws ddl_table_missing_exception
