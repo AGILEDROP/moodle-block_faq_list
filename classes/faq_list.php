@@ -164,6 +164,11 @@ class faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function create($faqlist) {
+        require_login(0, false);
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         require_sesskey();
 
         $data = new stdClass();
@@ -180,6 +185,11 @@ class faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function update($faqlist) {
+        require_login(0, false);
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         require_sesskey();
 
         $data = new stdClass();
@@ -197,6 +207,11 @@ class faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function delete($id) {
+        require_login(0, false);
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:delete', $context);
+
         require_sesskey();
 
         $this->db->delete_records($this->tablelists, ['id' => $id]);
@@ -270,6 +285,11 @@ class faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function add_title_translation($faqlistid, $title) {
+        require_login(0, false);
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         require_sesskey();
 
         $data = new stdClass();
@@ -289,6 +309,11 @@ class faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function update_title_translation($faqtitleid, $title) {
+        require_login(0, false);
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         require_sesskey();
 
         $data = new stdClass();
