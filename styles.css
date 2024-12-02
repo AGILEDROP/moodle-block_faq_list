@@ -1,42 +1,42 @@
 .block_faq_list .faq-wrapper p:last-child,
 .block_faq_list .faq-wrapper ul:last-child,
 .block_faq_list .faq-wrapper ol:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 /* Accordion view mode styles. */
 .block_faq_list .accordion-item {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .block_faq_list .accordion-item:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .block_faq_list .accordion-header {
-  position: relative;
-  font-size: 1rem;
+    position: relative;
+    font-size: 1rem;
 }
 
 .block_faq_list .accordion-header button .fa {
-  position: absolute;
-  top: calc(50% - .5em);
-  right: 1rem;
-  transition: transform ease .3s;
+    position: absolute;
+    top: calc(50% - .5em);
+    right: 1rem;
+    transition: transform ease .3s;
 }
 
 .block_faq_list .accordion-header button:not(.collapsed) .fa {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .block_faq_list .accordion-header button {
-  display: block;
-  background: none;
-  padding: 0;
-  border: 0;
+    display: block;
+    background: none;
+    padding: 0;
+    border: 0;
 }
 
 /* Slider view mode styles. */
 .block_faq_list .faq-wrapper .carousel-indicators li {
-  background-color: #000;
+    background-color: #000;
 }
