@@ -29,7 +29,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version      = 2024112800;
+$plugin->version      = 2024112900;
 $plugin->requires     = 2022041900;      // YYYYMMDDHH (This is the release version for Moodle 4.0).
 $plugin->component    = 'block_faq_list';
 $plugin->maturity     = MATURITY_STABLE;
