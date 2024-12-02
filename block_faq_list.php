@@ -41,6 +41,9 @@ use block_faq_list\faq_list;
  */
 class block_faq_list extends block_base {
 
+    /**
+     * @var bool $hideblocktitle Determines if the block title will be shown.
+     */
     private $hideblocktitle;
     /**
      * initializes block

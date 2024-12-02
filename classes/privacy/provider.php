@@ -26,6 +26,15 @@
 
 namespace block_faq_list\privacy;
 
+/**
+ * Privacy Subsystem for faq_list implementing null_provider.
+ *
+ * @package     block_faq_list
+ *
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class provider implements \core_privacy\local\metadata\null_provider {
 
     /**
