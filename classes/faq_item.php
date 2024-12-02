@@ -32,10 +32,20 @@ namespace block_faq_list;
 use dml_exception;
 use stdClass;
 
+/**
+ * FAQ item manager.
+ *
+ * @package     block_faq_list
+ *
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class faq_item extends faq_list {
 
     /**
      * Get faq list item by id.
+     *
      * @param int $id Id of selected faq list item.
      * @return stdClass|false Object of faq list item if exist otherwise false.
      * @throws dml_exception
@@ -52,6 +62,7 @@ class faq_item extends faq_list {
 
     /**
      * Get all faq list items (questions and answers) for selected faq list and language.
+     *
      * @param int $faqlistid Id of selected faq list.
      * @param string $lang Selected language, default is current language.
      * @return array Array of faq list items object.
@@ -67,6 +78,7 @@ class faq_item extends faq_list {
 
     /**
      * Get number of faq list items for selected faq list.
+     *
      * @param int $faqlistid Id of selected faq list.
      * @param string $lang Selected language.
      * @return int Number of faq list items.
@@ -83,6 +95,7 @@ class faq_item extends faq_list {
 
     /**
      * Create new faq list item.
+     *
      * @param stdClass $data Faq list item object.
      * @return int|false Return id of successfully created faq list item otherwise false.
      * @throws dml_exception
@@ -105,6 +118,7 @@ class faq_item extends faq_list {
 
     /**
      * Update existing faq list item.
+     *
      * @param stdClass $data Faq list item object.
      * @return bool True.
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -121,6 +135,7 @@ class faq_item extends faq_list {
 
     /**
      * Delete selecte faq list item.
+     *
      * @param int $faqitemid Id of selected faq list item.
      * @return void
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -142,6 +157,7 @@ class faq_item extends faq_list {
 
     /**
      * Move down faq list item (change sort-order of faq list items).
+     *
      * @param int $faqitemid Id of selected faq list item.
      * @return void
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -163,6 +179,7 @@ class faq_item extends faq_list {
 
     /**
      * Move up faq list item (change sort-order of faq list items).
+     *
      * @param int $faqitemid Id of selected faq list item.
      * @return void
      * @throws dml_exception A DML specific exception is thrown for any errors.

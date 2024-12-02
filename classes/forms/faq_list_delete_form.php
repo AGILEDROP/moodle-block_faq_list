@@ -32,10 +32,20 @@ namespace block_faq_list\forms;
 use coding_exception;
 use moodleform;
 
+/**
+ * FAQ list delete form.
+ *
+ * @package     block_faq_list
+ *
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class faq_list_delete_form extends moodleform {
 
     /**
      * Form definitions.
+     *
      * @return void
      * @throws coding_exception
      */

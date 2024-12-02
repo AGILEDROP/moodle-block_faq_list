@@ -33,6 +33,16 @@ use cache;
 use coding_exception;
 use moodle_exception;
 
+/**
+ * Helper class.
+ *
+ * @package     block_faq_list
+ *
+ * @property-read cache $cache
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class helper {
 
     /** @var cache Instance of cache. */
@@ -57,6 +67,7 @@ class helper {
 
     /**
      * Set last edited faq list id to session cache.
+     *
      * @param int $faqlistid Id of faq list.
      * @return bool
      */
@@ -66,6 +77,7 @@ class helper {
 
     /**
      * Get last edited faq list item id from session cache.
+     *
      * @return int|false Id or false.
      * @throws coding_exception
      */
@@ -75,6 +87,7 @@ class helper {
 
     /**
      * Set last edited faq list item it to session cache.
+     *
      * @param int $faqitemid Id of faq list item.
      * @return bool
      */
@@ -84,6 +97,7 @@ class helper {
 
     /**
      * Get last edited faq list language from session cache.
+     *
      * @return string|false Lang-code of faq list or false.
      * @throws coding_exception
      */
@@ -99,6 +113,7 @@ class helper {
 
     /**
      * Set last edited faq list language to session cache.
+     *
      * @param string $langcode Last edited faq list lang-code.
      * @return bool
      */
@@ -108,6 +123,7 @@ class helper {
 
     /**
      * Get array of tabs. All installed language packs are included.
+     *
      * @return array Array of language tabs.
      * @throws moodle_exception
      */

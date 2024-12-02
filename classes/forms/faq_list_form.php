@@ -33,10 +33,20 @@ use block_faq_list\faq_list;
 use coding_exception;
 use moodleform;
 
+/**
+ * FAQ list creation form.
+ *
+ * @package     block_faq_list
+ *
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class faq_list_form extends moodleform {
 
     /**
      * Form definitions.
+     *
      * @return void
      * @throws coding_exception
      */
