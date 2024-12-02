@@ -29,11 +29,22 @@
 
 use block_faq_list\faq_list;
 
+/**
+ * Block instance configuration form.
+ *
+ * @package     block_faq_list
+ *
+ * @property-read block_base $block
+ * @property-read moodle_page $page
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_faq_list_edit_form extends block_edit_form {
 
     /**
      * Form definitions for each block instance
-     * @param $mform
+     * @param MoodleQuickForm $mform
      * @return void
      * @throws coding_exception
      * @throws dml_exception

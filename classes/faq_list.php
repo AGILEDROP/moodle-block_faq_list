@@ -30,10 +30,26 @@
 namespace block_faq_list;
 
 use dml_exception;
+use moodle_database;
 use stdClass;
 
+/**
+ * FAQ list manager.
+ *
+ * @package     block_faq_list
+ *
+ * @property-read moodle_database $db
+ * @property-read helper $helper
+ * @property-read string $tablelists
+ * @property-read string $tabletitles
+ * @property-read string $tableitems
+ * @copyright   Agiledrop, 2024
+ * @author      Agiledrop 2024 <hello@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class faq_list {
 
+    /** @var moodle_database Database connection. */
     public $db;
 
     /** @var helper Helper class instance. */
@@ -94,6 +110,7 @@ class faq_list {
 
     /**
      * Get faq list object with given id.
+     *
      * @param int $id Id of faq list.
      * @return stdClass|bool Faq list object otherwise false.
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -110,6 +127,7 @@ class faq_list {
 
     /**
      * Get all faq lists.
+     *
      * @return array Array of all faq lists.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
@@ -119,6 +137,7 @@ class faq_list {
 
     /**
      * Get all faq list items (questions and answers) for selected faq list id.
+     *
      * @param int $faqlistid Id of faq list.
      * @param string $lang Selected language.
      * @return array Array of faq items.
@@ -139,6 +158,7 @@ class faq_list {
 
     /**
      * Create new faq list.
+     *
      * @param stdClass $faqlist Faq list object.
      * @return int|false Return id of successfully created faq list, otherwise false.
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -154,6 +174,7 @@ class faq_list {
 
     /**
      * Update existing faq list.
+     *
      * @param stdClass $faqlist Faq list object.
      * @return bool True.
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -170,6 +191,7 @@ class faq_list {
 
     /**
      * Delete existing faq list with selected $id and all items of it.
+     *
      * @param int $id Id of faq list.
      * @return void
      * @throws dml_exception A DML specific exception is thrown for any errors.
@@ -184,6 +206,7 @@ class faq_list {
 
     /**
      * Get available faq lists array.
+     *
      * @return array Array of all available faq lists with structure ['id'] => shortname.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
@@ -200,6 +223,7 @@ class faq_list {
 
     /**
      * Get translated title for selected faq list and language.
+     *
      * @param int $faqlistid Id of faq list.
      * @param string $lang Selected language (default is current language).
      * @return stdClass|false Object of translated title otherwise false.
@@ -222,6 +246,7 @@ class faq_list {
 
     /**
      * Get faq list title by own id.
+     *
      * @param string $faqtitleid Id of selected title.
      * @return stdClass|false Object of selected title if exist otherwise false.
      * @throws dml_exception
@@ -238,6 +263,7 @@ class faq_list {
 
     /**
      * Add faq list title translation for selected faq list.
+     *
      * @param int $faqlistid Id of faq list.
      * @param string $title Title translation.
      * @return bool|int Return id of title translation otherwise false.
@@ -256,6 +282,7 @@ class faq_list {
 
     /**
      * Update selected title translation.
+     *
      * @param int $faqtitleid Id of existing faq title translation.
      * @param string $title Title translation.
      * @return bool True.
@@ -273,6 +300,7 @@ class faq_list {
 
     /**
      * Export values for template for selected faq list.
+     *
      * @param string $shortname Shortname of selected faq list.
      * @param bool $showtitle Display faq list title or not.
      * @return array
@@ -313,6 +341,7 @@ class faq_list {
 
     /**
      * Export values for template for selected faq list.
+     *
      * @param int $faqlistid Id of selected faq list.
      * @param bool $showtitle Display faq list title or not.
      * @return array

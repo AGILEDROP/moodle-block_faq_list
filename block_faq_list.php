@@ -34,12 +34,16 @@ use block_faq_list\faq_list;
  *
  * @package     block_faq_list
  *
+ * @property-read bool $hideblocktitle
  * @copyright   Agiledrop, 2024
  * @author      Agiledrop 2024 <hello@agiledrop.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_faq_list extends block_base {
 
+    /**
+     * @var bool $hideblocktitle Determines if the block title will be shown.
+     */
     private $hideblocktitle;
     /**
      * initializes block
@@ -59,6 +63,12 @@ class block_faq_list extends block_base {
         return $this->hideblocktitle;
     }
 
+    /**
+     * Control which title to show on the block.
+     *
+     * @return void
+     * @throws dml_exception
+     */
     public function specialization() {
         $showblocktitle = false;
         $showfaqtitle = false;
@@ -87,7 +97,8 @@ class block_faq_list extends block_base {
     }
 
     /**
-     * Get/load block contents
+     * Get/load block contents.
+     *
      * @return stdClass
      */
     public function get_content() {

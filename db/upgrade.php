@@ -27,8 +27,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Rename the database tables to add prefix.
+ *
+ * @param int $oldversion
+ * @return bool
+ * @throws ddl_exception
+ * @throws ddl_table_missing_exception
+ */
 function xmldb_block_faq_list_upgrade($oldversion): bool {
     global $CFG, $DB;
 
