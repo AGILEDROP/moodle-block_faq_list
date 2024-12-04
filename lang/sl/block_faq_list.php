@@ -46,9 +46,9 @@ $string['error:required'] = 'To polje je obvezno.';
 $string['error:unique'] = 'To kratko ime že obstaja.';
 
 $string['faq_list:addinstance'] = 'Dodaj instanco';
-$string['faq_list:myaddinstance'] = 'Dodaj lastno instanco';
 $string['faq_list:createormodify'] = 'Ustvari ali uredi sezname pogostih vprašanj';
 $string['faq_list:delete'] = 'Izbriši sezname pogostih vprašanj';
+$string['faq_list:myaddinstance'] = 'Dodaj lastno instanco';
 $string['faq_list:read'] = 'Pregleduj sezname pogostih vprašanj';
 
 $string['header:faqitemadd'] = 'Ustvari nov seznam pogostih vprašanj';
@@ -69,8 +69,8 @@ $string['label:colfaqitem'] = 'Vprašanje in odgovor';
 $string['label:colshortname'] = 'Kratko ime';
 
 $string['label:configblocktitle'] = 'Prikaži naslov bloka';
-$string['label:configblocktitlefaq'] = 'Prikaži ime bloka kot naslov izbranega seznama pogostih vprašanj.';
 $string['label:configblocktitle_help'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
+$string['label:configblocktitlefaq'] = 'Prikaži ime bloka kot naslov izbranega seznama pogostih vprašanj.';
 $string['label:configblocktitlenone'] = 'Nič - skrij naslov bloka';
 $string['label:configblocktitlepluginname'] = 'Prikaži naslov bloka kot ime vtičnika';
 $string['label:configdisplaytype'] = 'Prikaži seznam pogostih vprašanj kot';

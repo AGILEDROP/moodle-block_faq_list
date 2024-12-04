@@ -46,9 +46,9 @@ $string['error:required'] = 'This field is required.';
 $string['error:unique'] = 'This shortname already exist.';
 
 $string['faq_list:addinstance'] = 'Add instance';
-$string['faq_list:myaddinstance'] = 'Add own instance';
 $string['faq_list:createormodify'] = 'Create or modify FAQ lists and items';
 $string['faq_list:delete'] = 'Delete FAQ lists and items';
+$string['faq_list:myaddinstance'] = 'Add own instance';
 $string['faq_list:read'] = 'See FAQ lists and items';
 
 $string['header:faqitemadd'] = 'Create new Question';
@@ -69,8 +69,8 @@ $string['label:colfaqitem'] = 'Question and answer';
 $string['label:colshortname'] = 'Shortname';
 
 $string['label:configblocktitle'] = 'Display block title';
-$string['label:configblocktitlefaq'] = 'Display block title as title of selected faq list.';
 $string['label:configblocktitle_help'] = 'Select how block title is displayed. If you choose display as faq title, note that this title must be provided for current language.';
+$string['label:configblocktitlefaq'] = 'Display block title as title of selected faq list.';
 $string['label:configblocktitlenone'] = 'None - hide block title';
 $string['label:configblocktitlepluginname'] = 'Display block title as pluginname';
 $string['label:configdisplaytype'] = 'Show FAQ list as';
