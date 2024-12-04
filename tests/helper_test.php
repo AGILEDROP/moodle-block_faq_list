@@ -25,14 +25,14 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_faq_list\tests;
+namespace block_faq_list;
 
 use block_faq_list\helper;
 use advanced_testcase;
 
 defined('MOODLE_INTERNAL') || die();
 
-// Include all the needed stuff
+// Include all the needed stuff.
 global $CFG;
 require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
 
@@ -40,15 +40,14 @@ require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
  * PHPUnit tests for the block_faq_list helper class.
  *
  * @package     block_faq_list
- *
  * @group block_faq_list
+ * @covers     \block_faq_list\helper
  *
  * @copyright   Agiledrop, 2024
  * @author      Agiledrop 2024 <hello@agiledrop.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class helper_test extends advanced_testcase
-{
+final class helper_test extends advanced_testcase {
 
     /** @var helper Instance of helper class. */
     private $helper;
@@ -56,8 +55,9 @@ class helper_test extends advanced_testcase
     /**
      * Setup before tests.
      */
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
+        parent::setUp();
+
         $this->resetAfterTest(true);
         $this->helper = new helper();
     }
@@ -65,48 +65,44 @@ class helper_test extends advanced_testcase
     /**
      * Test setting and getting last edited FAQ list ID.
      */
-    public function test_set_and_get_last_edit_faq_list_id()
-    {
-        $faqListId = 123;
-        $this->assertTrue($this->helper->set_last_edit_faq_list_id($faqListId));
-        $this->assertEquals($faqListId, $this->helper->get_last_edit_faq_list_id());
+    public function test_set_and_get_last_edit_faq_list_id(): void {
+        $faqlistid = 123;
+        $this->assertTrue($this->helper->set_last_edit_faq_list_id($faqlistid));
+        $this->assertEquals($faqlistid, $this->helper->get_last_edit_faq_list_id());
     }
 
     /**
      * Test setting and getting last edited FAQ item ID.
      */
-    public function test_set_and_get_last_edit_faq_item_id()
-    {
-        $faqItemId = 456;
-        $this->assertTrue($this->helper->set_last_edit_faq_item_id($faqItemId));
-        $this->assertEquals($faqItemId, $this->helper->get_last_edit_faq_item_id());
+    public function test_set_and_get_last_edit_faq_item_id(): void {
+        $faqitemid = 456;
+        $this->assertTrue($this->helper->set_last_edit_faq_item_id($faqitemid));
+        $this->assertEquals($faqitemid, $this->helper->get_last_edit_faq_item_id());
     }
 
     /**
      * Test setting and getting last edited FAQ language.
      */
-    public function test_set_and_get_last_edit_faq_lang()
-    {
-        $faqLang = 'en';
-        $this->assertTrue($this->helper->set_last_edit_faq_lang($faqLang));
-        $this->assertEquals($faqLang, $this->helper->get_last_edit_faq_lang());
+    public function test_set_and_get_last_edit_faq_lang(): void {
+        $faqlang = 'en';
+        $this->assertTrue($this->helper->set_last_edit_faq_lang($faqlang));
+        $this->assertEquals($faqlang, $this->helper->get_last_edit_faq_lang());
     }
 
     /**
      * Test getting FAQ list items language tabs.
      */
-    public function test_get_faq_list_items_language_tabs()
-    {
+    public function test_get_faq_list_items_language_tabs(): void {
         $tabs = $this->helper->get_faq_list_items_language_tabs();
 
         $this->assertIsArray($tabs);
 
         if (!empty($tabs)) {
-            $firstTab = $tabs[0];
-            $this->assertInstanceOf(\tabobject::class, $firstTab);
-            $this->assertNotEmpty($firstTab->id);
-            $this->assertNotEmpty($firstTab->link);
-            $this->assertNotEmpty($firstTab->text);
+            $firsttab = $tabs[0];
+            $this->assertInstanceOf(\tabobject::class, $firsttab);
+            $this->assertNotEmpty($firsttab->id);
+            $this->assertNotEmpty($firsttab->link);
+            $this->assertNotEmpty($firsttab->text);
         }
     }
 }
