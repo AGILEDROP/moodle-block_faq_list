@@ -101,12 +101,10 @@ class faq_item extends faq_list {
      * @throws dml_exception
      */
     public function create($data) {
-        require_login(0, false);
+        require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
-
-        require_sesskey();
 
         $faqlistid = $this->helper->get_last_edit_faq_list_id();
         $faqlang = $this->helper->get_last_edit_faq_lang();
@@ -131,12 +129,10 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function update($data) {
-        require_login(0, false);
+        require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
-
-        require_sesskey();
 
         $faqitemdata = new stdClass();
         $faqitemdata->id = $data->id;
@@ -155,12 +151,10 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function delete($faqitemid) {
-        require_login(0, false);
+        require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:delete', $context);
-
-        require_sesskey();
 
         $faqitem = $this->get_by_id($faqitemid);
         $sortorder = $faqitem->sortorder;
@@ -184,12 +178,10 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function movedown($faqitemid) {
-        require_login(0, false);
+        require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
-
-        require_sesskey();
 
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;
@@ -213,12 +205,10 @@ class faq_item extends faq_list {
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function moveup($faqitemid) {
-        require_login(0, false);
+        require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
-
-        require_sesskey();
 
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;
