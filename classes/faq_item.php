@@ -103,6 +103,9 @@ class faq_item extends faq_list {
     public function create($data) {
         require_sesskey();
 
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         $faqlistid = $this->helper->get_last_edit_faq_list_id();
         $faqlang = $this->helper->get_last_edit_faq_lang();
         $itemcount = $this->count_items($faqlistid, $faqlang);
@@ -128,6 +131,9 @@ class faq_item extends faq_list {
     public function update($data) {
         require_sesskey();
 
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         $faqitemdata = new stdClass();
         $faqitemdata->id = $data->id;
         $faqitemdata->question = $data->question;
@@ -146,6 +152,9 @@ class faq_item extends faq_list {
      */
     public function delete($faqitemid) {
         require_sesskey();
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:delete', $context);
 
         $faqitem = $this->get_by_id($faqitemid);
         $sortorder = $faqitem->sortorder;
@@ -171,6 +180,9 @@ class faq_item extends faq_list {
     public function movedown($faqitemid) {
         require_sesskey();
 
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;
         $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
@@ -194,6 +206,9 @@ class faq_item extends faq_list {
      */
     public function moveup($faqitemid) {
         require_sesskey();
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
 
         $faqitemselected = $this->get_by_id($faqitemid);
         $sortorder = $faqitemselected->sortorder;

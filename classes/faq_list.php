@@ -166,6 +166,9 @@ class faq_list {
     public function create($faqlist) {
         require_sesskey();
 
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         $data = new stdClass();
         $data->shortname = $faqlist->shortname;
 
@@ -181,6 +184,9 @@ class faq_list {
      */
     public function update($faqlist) {
         require_sesskey();
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
 
         $data = new stdClass();
         $data->id = $faqlist->id;
@@ -198,6 +204,9 @@ class faq_list {
      */
     public function delete($id) {
         require_sesskey();
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:delete', $context);
 
         $this->db->delete_records($this->tablelists, ['id' => $id]);
         $this->db->delete_records($this->tabletitles, ['list_id' => $id]);
@@ -272,6 +281,9 @@ class faq_list {
     public function add_title_translation($faqlistid, $title) {
         require_sesskey();
 
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
+
         $data = new stdClass();
         $data->list_id = $faqlistid;
         $data->lang = $this->helper->get_last_edit_faq_lang();
@@ -290,6 +302,9 @@ class faq_list {
      */
     public function update_title_translation($faqtitleid, $title) {
         require_sesskey();
+
+        $context = \context_system::instance();
+        require_capability('block/faq_list:createormodify', $context);
 
         $data = new stdClass();
         $data->id = $faqtitleid;
