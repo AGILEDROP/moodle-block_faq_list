@@ -127,7 +127,7 @@ foreach ($records as $id => $record) {
     if ($i < $faqitemscount) {
         $formdown = new faq_item_move_form(null, [
             'faq_item_id' => $record->id,
-            'action' => 'moveitemdown'
+            'action' => 'moveitemdown',
         ]);
         $movedownicon = $formdown->render();
     }
@@ -136,7 +136,7 @@ foreach ($records as $id => $record) {
     if ($i > 1) {
         $formup = new faq_item_move_form(null, [
             'faq_item_id' => $record->id,
-            'action' => 'moveitemup'
+            'action' => 'moveitemup',
         ]);
         $moveupicon = $formup->render();
     }
