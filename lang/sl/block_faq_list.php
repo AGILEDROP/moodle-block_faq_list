@@ -42,6 +42,8 @@ $string['button:editfaqitem'] = 'Uredi';
 $string['button:editfaqlist'] = 'Uredi';
 $string['button:editfaqtitle'] = 'Uredi prevod naslova';
 
+$string['cachedef_last_edit'] = 'Zadnje spremenjeni elementi';
+
 $string['error:required'] = 'To polje je obvezno.';
 $string['error:unique'] = 'To kratko ime že obstaja.';
 
