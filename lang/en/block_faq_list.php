@@ -91,6 +91,8 @@ $string['label:faqquestion'] = 'Question';
 $string['label:faqquestion_help'] = 'Write text for question.';
 $string['label:faqtitle'] = 'FAQ Title translation';
 $string['label:faqtitle_help'] = 'Enter translated title for selected language.';
+$string['label:moveitemdown'] = 'Move item down';
+$string['label:moveitemup'] = 'Move item up';
 
 $string['msgfaqitemcreated'] = 'Question and answer was successfully created.';
 $string['msgfaqitemdeleted'] = 'Question and answer was successfully deleted.';

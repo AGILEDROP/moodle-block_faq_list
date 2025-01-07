@@ -99,8 +99,8 @@ $table = new html_table();
 
 $table->head = [
     get_string('label:colfaqitem', 'block_faq_list'),
-    '', // Move down.
-    '', // Move up.
+    get_string('label:moveitemdown', 'block_faq_list'),
+    get_string('label:moveitemup', 'block_faq_list'),
     get_string('label:colactionedit', 'block_faq_list'),
     get_string('label:colactiondelete', 'block_faq_list'),
 ];

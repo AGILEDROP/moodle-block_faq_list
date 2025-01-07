@@ -91,6 +91,8 @@ $string['label:faqquestion'] = 'Vprašanje';
 $string['label:faqquestion_help'] = 'Napišite besedilo za vprašanje.';
 $string['label:faqtitle'] = 'Prevod naslova seznama pogostih vprašanj';
 $string['label:faqtitle_help'] = 'Vnesite preveden naslov za izbran seznam pogostih vprašanj.';
+$string['label:moveitemdown'] = 'Premakni element navzdol';
+$string['label:moveitemup'] = 'Premakni element navzgor';
 
 $string['msgfaqitemcreated'] = 'Vprašanje in odgovor je bil uspešno ustvarjen.';
 $string['msgfaqitemdeleted'] = 'Vprašanje in odgovor je bil uspešno izbrisan.';
