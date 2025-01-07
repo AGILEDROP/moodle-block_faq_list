@@ -42,6 +42,8 @@ $string['button:editfaqitem'] = 'Edit';
 $string['button:editfaqlist'] = 'Edit';
 $string['button:editfaqtitle'] = 'Edit title translation';
 
+$string['cachedef_last_edit'] = 'Last edited items';
+
 $string['error:required'] = 'This field is required.';
 $string['error:unique'] = 'This shortname already exist.';
 
