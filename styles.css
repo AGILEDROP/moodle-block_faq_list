@@ -40,3 +40,15 @@
 .block_faq_list .faq-wrapper .carousel-indicators li {
     background-color: #000;
 }
+
+body#page-blocks-faq_list-view-faq_list_items {
+    input.action-icon {
+        max-height: 1rem;
+        max-width: 1rem;
+        filter: invert(30%) sepia(64%) saturate(1621%) hue-rotate(186deg) brightness(96%) contrast(94%);
+    }
+
+    input.action-icon:hover {
+        filter: invert(20%) sepia(93%) saturate(900%) hue-rotate(177deg) brightness(96%) contrast(97%);
+    }
+}

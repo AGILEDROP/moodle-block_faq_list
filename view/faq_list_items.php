@@ -28,10 +28,11 @@
  */
 
 use block_faq_list\faq_item;
+use block_faq_list\forms\faq_item_move_form;
 
 require('../../../config.php');
 
-
+require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->libdir . '/adminlib.php');
 global $CFG, $USER, $DB, $OUTPUT, $PAGE;
 
@@ -122,32 +123,34 @@ foreach ($records as $id => $record) {
 
     $viewurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', $urlparam);
 
+    // Moving an item down.
     if ($i < $faqitemscount) {
-        // Link to move down item.
-        $params = array_merge($urlparam, ['action' => 'moveitemdown']);
-        $movedownlink = new moodle_url($PAGE->url, $params);
-        $movedownicon = $OUTPUT->action_icon($movedownlink,
-                new \pix_icon('t/down', get_string('button:editfaqitem', 'block_faq_list')));
+        $formdown = new faq_item_move_form(null, [
+            'faq_item_id' => $record->id,
+            'action' => 'moveitemdown'
+        ]);
+        $movedownicon = $formdown->render();
     }
 
+    // Moving an item up.
     if ($i > 1) {
-        // Link to move up item.
-        $params = array_merge($urlparam, ['action' => 'moveitemup']);
-        $moveuplink = new moodle_url($PAGE->url, $params);
-        $moveupicon = $OUTPUT->action_icon($moveuplink,
-                new \pix_icon('t/up', get_string('button:editfaqitem', 'block_faq_list')));
+        $formup = new faq_item_move_form(null, [
+            'faq_item_id' => $record->id,
+            'action' => 'moveitemup'
+        ]);
+        $moveupicon = $formup->render();
     }
 
     // Link to edit faq item.
     $editlink = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', $urlparam);
     $editicon = $OUTPUT->action_icon($editlink,
-            new \pix_icon('t/edit', get_string('button:editfaqitem', 'block_faq_list')));
+        new \pix_icon('t/edit', get_string('button:editfaqitem', 'block_faq_list')));
 
     // Link to delete faq item.
     $params = array_merge($urlparam, ['action' => 'deleteitem']);
     $deletelink = new moodle_url('/blocks/faq_list/view/faq_item_delete.php', $params);
     $deleteicon = $OUTPUT->action_icon($deletelink,
-            new \pix_icon('t/delete', get_string('button:deletefaqitem', 'block_faq_list')));
+        new \pix_icon('t/delete', get_string('button:deletefaqitem', 'block_faq_list')));
 
     $faqitemtext = '';
     $faqitemtext .= html_writer::tag('h5', $record->question, []);
@@ -183,12 +186,12 @@ echo html_writer::start_div('ml-2');
 if ($currentfaqlisttitle) {
     $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php', ['faq_title_id' => $currentfaqlisttitle->id]);
     echo $OUTPUT->single_button($actionurl,
-            get_string('button:editfaqtitle', 'block_faq_list'), 'POST', ['type' => 'secondary']);
+        get_string('button:editfaqtitle', 'block_faq_list'), 'POST', ['type' => 'secondary']);
 
 } else {
     $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php');
     echo $OUTPUT->single_button($actionurl,
-            get_string('button:addfaqtitle', 'block_faq_list'), 'POST', ['type' => 'primary']);
+        get_string('button:addfaqtitle', 'block_faq_list'), 'POST', ['type' => 'primary']);
 
 }
 echo html_writer::end_div();
@@ -201,10 +204,10 @@ echo html_writer::table($table);
 
 $actionurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php');
 echo $OUTPUT->single_button($actionurl,
-        get_string('button:addfaqitem', 'block_faq_list'), 'POST', ['type' => 'primary']);
+    get_string('button:addfaqitem', 'block_faq_list'), 'POST', ['type' => 'primary']);
 
 $actionurl = new moodle_url('/blocks/faq_list/view/faq_lists.php');
 echo $OUTPUT->single_button($actionurl,
-        get_string('button:backtofaqlist', 'block_faq_list'), 'POST', ['type' => 'secondary']);
+    get_string('button:backtofaqlist', 'block_faq_list'), 'POST', ['type' => 'secondary']);
 
 echo $OUTPUT->footer();
