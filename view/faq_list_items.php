@@ -131,7 +131,7 @@ foreach ($records as $id => $record) {
     }
 
     if ($i > 1) {
-        // Link to move down item.
+        // Link to move up item.
         $params = array_merge($urlparam, ['action' => 'moveitemup']);
         $moveuplink = new moodle_url($PAGE->url, $params);
         $moveupicon = $OUTPUT->action_icon($moveuplink,
