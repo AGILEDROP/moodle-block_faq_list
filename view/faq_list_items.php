@@ -153,8 +153,12 @@ foreach ($records as $id => $record) {
         new \pix_icon('t/delete', get_string('button:deletefaqitem', 'block_faq_list')));
 
     $faqitemtext = '';
-    $faqitemtext .= html_writer::tag('h5', $record->question, []);
-    $faqitemtext .= html_writer::tag('div', $record->answer, []);
+    $faqitemtext .= html_writer::tag('h5', format_string($record->question ?? '', true, ['context' => context_system::instance()]), []);
+    $faqitemtext .= html_writer::tag('div', format_text(
+        $record->answer ?? '',
+        $record->answer_format ?? FORMAT_HTML,
+        ['context' => context_system::instance()]
+    ), []);
 
     $row = [
         $faqitemtext,
@@ -175,7 +179,7 @@ echo html_writer::tag('hr', '', []);
 $faqtitletext = get_string('header:faqtitle', 'block_faq_list');
 $faqtitletext .= ': ';
 if ($currentfaqlisttitle) {
-    $faqtitletext .= $currentfaqlisttitle->title;
+    $faqtitletext .= format_string($currentfaqlisttitle->title, true, ['context' => context_system::instance()]);
 } else {
     $faqtitletext .= '/';
 }

@@ -335,18 +335,26 @@ class faq_list {
         $data['show_title'] = $showtitle;
 
         if ($showtitle && $faqlisttitle) {
-            $data['faq_title'] = $faqlisttitle->title;
+            $data['faq_title'] = format_string($faqlisttitle->title, true, ['context' => \context_system::instance()]);
         } else {
             $data['faq_title'] = '';
         }
 
+        $context = \context_system::instance();
+
         $itemnumber = 0;
         foreach ($faqlistitems as $faqlistitem) {
+            // Apply the stored format, filters and HTML cleaning.
+            $answer = format_text(
+                $faqlistitem->answer ?? '',
+                $faqlistitem->answer_format ?? FORMAT_HTML,
+                ['context' => $context]
+            );
             $item = [
                 'itemnumber' => $itemnumber,
                 'id' => $faqlistitem->id,
-                'question' => $faqlistitem->question,
-                'answer' => $faqlistitem->answer,
+                'question' => format_string($faqlistitem->question ?? '', true, ['context' => $context]),
+                'answer' => $answer,
             ];
             $data['faq_items'][] = $item;
             $itemnumber++;

@@ -87,7 +87,7 @@ foreach ($records as $record) {
 
     // Build table row.
     $row = [
-        html_writer::link($urlview, $record->shortname),
+        html_writer::link($urlview, s($record->shortname)),
         $editicon,
         $deleteicon,
     ];

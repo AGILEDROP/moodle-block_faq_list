@@ -87,7 +87,7 @@ class block_faq_list extends block_base {
             if ($title) {
                 $titletext = $title->title;
                 if (!empty($titletext)) {
-                    $this->title = $title->title;
+                    $this->title = format_string($titletext, true, ['context' => context_system::instance()]);
                     $this->hideblocktitle = false;
                 }
             }
