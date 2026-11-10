@@ -173,54 +173,75 @@ class faq_item extends faq_list {
     /**
      * Move down faq list item (change sort-order of faq list items).
      *
+     * Does nothing if the item is already last in its list and language.
+     *
      * @param int $faqitemid Id of selected faq list item.
-     * @return void
+     * @return bool True if the item was moved, false otherwise.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function movedown($faqitemid) {
-        require_sesskey();
-
-        $context = \context_system::instance();
-        require_capability('block/faq_list:createormodify', $context);
-
-        $faqitemselected = $this->get_by_id($faqitemid);
-        $sortorder = $faqitemselected->sortorder;
-        $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder == $sortorder + 1) {
-                $faqitem->sortorder = $sortorder;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
-        }
-        $faqitemselected->sortorder = $sortorder + 1;
-        $this->db->update_record($this->tableitems, $faqitemselected);
+        return $this->move($faqitemid, true);
     }
 
     /**
      * Move up faq list item (change sort-order of faq list items).
      *
+     * Does nothing if the item is already first in its list and language.
+     *
      * @param int $faqitemid Id of selected faq list item.
-     * @return void
+     * @return bool True if the item was moved, false otherwise.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function moveup($faqitemid) {
+        return $this->move($faqitemid, false);
+    }
+
+    /**
+     * Swap sort-order with the adjacent item in the same list and language.
+     *
+     * @param int $faqitemid Id of selected faq list item.
+     * @param bool $down True to move down, false to move up.
+     * @return bool True if the item was moved, false if no adjacent item exists.
+     * @throws dml_exception A DML specific exception is thrown for any errors.
+     */
+    private function move($faqitemid, $down) {
         require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqitemselected = $this->get_by_id($faqitemid);
-        $sortorder = $faqitemselected->sortorder;
-        $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder == $sortorder - 1) {
-                $faqitem->sortorder = $sortorder;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
+        $selected = $this->get_by_id($faqitemid);
+        if (!$selected) {
+            return false;
         }
-        $faqitemselected->sortorder = $sortorder - 1;
-        $this->db->update_record($this->tableitems, $faqitemselected);
+
+        $operator = $down ? '>' : '<';
+        $direction = $down ? 'ASC' : 'DESC';
+        $sql = "SELECT *
+                  FROM {{$this->tableitems}}
+                 WHERE list_id = :listid
+                   AND lang = :lang
+                   AND sortorder $operator :sortorder
+              ORDER BY sortorder $direction, id $direction";
+        $params = [
+            'listid' => $selected->list_id,
+            'lang' => $selected->lang,
+            'sortorder' => $selected->sortorder,
+        ];
+        $adjacent = $this->db->get_records_sql($sql, $params, 0, 1);
+        if (!$adjacent) {
+            return false;
+        }
+        $adjacent = reset($adjacent);
+
+        $transaction = $this->db->start_delegated_transaction();
+        $selectedsortorder = $selected->sortorder;
+        $selected->sortorder = $adjacent->sortorder;
+        $adjacent->sortorder = $selectedsortorder;
+        $this->db->update_record($this->tableitems, $selected);
+        $this->db->update_record($this->tableitems, $adjacent);
+        $transaction->allow_commit();
+
+        return true;
     }
 }
