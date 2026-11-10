@@ -121,6 +121,8 @@ class block_faq_list extends block_base {
         }
 
         $templatecontext = $faqlist->export_faq_list_by_id($faqlistid, $titleshow);
+        // Unique per block instance, so HTML ids don't clash when the same FAQ list is shown in several blocks.
+        $templatecontext['blockid'] = (int)$this->instance->id;
 
         $renderer = $this->page->get_renderer('core');
 
