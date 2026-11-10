@@ -153,7 +153,7 @@ class faq_list {
                 'lang' => $lang,
         ];
 
-        return $this->db->get_records($this->tableitems, $conditions, 'sortorder');
+        return $this->db->get_records($this->tableitems, $conditions, 'sortorder, id');
     }
 
     /**

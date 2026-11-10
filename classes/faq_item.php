@@ -73,7 +73,7 @@ class faq_item extends faq_list {
                 'list_id' => $faqlistid,
                 'lang' => $lang,
         ];
-        return $this->db->get_records($this->tableitems, $conditions, 'sortorder');
+        return $this->db->get_records($this->tableitems, $conditions, 'sortorder, id');
     }
 
     /**
