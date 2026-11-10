@@ -208,9 +208,12 @@ class faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:delete', $context);
 
-        $this->db->delete_records($this->tablelists, ['id' => $id]);
-        $this->db->delete_records($this->tabletitles, ['list_id' => $id]);
-        $this->db->delete_records($this->tableitems, ['list_id' => $id]);
+        // One lock and one transaction: either the list, its titles and its items all go, or none do.
+        helper::run_locked_transaction((int)$id, function () use ($id) {
+            $this->db->delete_records($this->tableitems, ['list_id' => $id]);
+            $this->db->delete_records($this->tabletitles, ['list_id' => $id]);
+            $this->db->delete_records($this->tablelists, ['id' => $id]);
+        });
     }
 
     /**

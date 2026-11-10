@@ -44,6 +44,7 @@ $string['button:editfaqtitle'] = 'Edit title translation';
 
 $string['cachedef_last_edit'] = 'Last edited items';
 
+$string['error:locktimeout'] = 'The FAQ list is being modified by someone else. Please try again.';
 $string['error:required'] = 'This field is required.';
 $string['error:unique'] = 'This shortname already exist.';
 

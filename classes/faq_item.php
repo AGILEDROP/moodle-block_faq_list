@@ -108,17 +108,26 @@ class faq_item extends faq_list {
 
         $faqlistid = $this->helper->get_last_edit_faq_list_id();
         $faqlang = $this->helper->get_last_edit_faq_lang();
-        $itemcount = $this->count_items($faqlistid, $faqlang);
 
-        $faqitemdata = new stdClass();
-        $faqitemdata->list_id = $faqlistid;
-        $faqitemdata->lang = $faqlang;
-        $faqitemdata->question = $data->question;
-        $faqitemdata->answer = $data->answer['text'];
-        $faqitemdata->answer_format = $data->answer['format'];
-        $faqitemdata->sortorder = $itemcount + 1;
+        return helper::run_locked_transaction($faqlistid, function () use ($faqlistid, $faqlang, $data) {
+            // Next position is calculated under the lock, so concurrent creates cannot get the same one.
+            $maxsortorder = (int)$this->db->get_field_select(
+                $this->tableitems,
+                'MAX(sortorder)',
+                'list_id = :listid AND lang = :lang',
+                ['listid' => $faqlistid, 'lang' => $faqlang]
+            );
 
-        return $this->db->insert_record($this->tableitems, $faqitemdata, true);
+            $faqitemdata = new stdClass();
+            $faqitemdata->list_id = $faqlistid;
+            $faqitemdata->lang = $faqlang;
+            $faqitemdata->question = $data->question;
+            $faqitemdata->answer = $data->answer['text'];
+            $faqitemdata->answer_format = $data->answer['format'];
+            $faqitemdata->sortorder = $maxsortorder + 1;
+
+            return $this->db->insert_record($this->tableitems, $faqitemdata, true);
+        });
     }
 
     /**
@@ -157,17 +166,33 @@ class faq_item extends faq_list {
         require_capability('block/faq_list:delete', $context);
 
         $faqitem = $this->get_by_id($faqitemid);
-        $sortorder = $faqitem->sortorder;
-
-        $this->db->delete_records($this->tableitems, ['id' => $faqitem->id]);
-        $faqitems = $this->get_items($faqitem->list_id, $faqitem->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder > $sortorder) {
-                $faqitem->sortorder = $faqitem->sortorder - 1;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
+        if (!$faqitem) {
+            return;
         }
+
+        helper::run_locked_transaction($faqitem->list_id, function () use ($faqitemid) {
+            // Re-read under the lock: the position may have changed since the unlocked read.
+            $faqitem = $this->get_by_id($faqitemid);
+            if (!$faqitem) {
+                return;
+            }
+
+            $this->db->delete_records($this->tableitems, ['id' => $faqitem->id]);
+
+            // Close the gap with a single statement instead of updating each row separately.
+            $this->db->execute(
+                "UPDATE {{$this->tableitems}}
+                    SET sortorder = sortorder - 1
+                  WHERE list_id = :listid
+                    AND lang = :lang
+                    AND sortorder > :sortorder",
+                [
+                    'listid' => $faqitem->list_id,
+                    'lang' => $faqitem->lang,
+                    'sortorder' => $faqitem->sortorder,
+                ]
+            );
+        });
     }
 
     /**
@@ -215,33 +240,39 @@ class faq_item extends faq_list {
             return false;
         }
 
-        $operator = $down ? '>' : '<';
-        $direction = $down ? 'ASC' : 'DESC';
-        $sql = "SELECT *
-                  FROM {{$this->tableitems}}
-                 WHERE list_id = :listid
-                   AND lang = :lang
-                   AND sortorder $operator :sortorder
-              ORDER BY sortorder $direction, id $direction";
-        $params = [
-            'listid' => $selected->list_id,
-            'lang' => $selected->lang,
-            'sortorder' => $selected->sortorder,
-        ];
-        $adjacent = $this->db->get_records_sql($sql, $params, 0, 1);
-        if (!$adjacent) {
-            return false;
-        }
-        $adjacent = reset($adjacent);
+        return helper::run_locked_transaction($selected->list_id, function () use ($faqitemid, $down) {
+            // Re-read under the lock so the neighbour is found from current positions.
+            $selected = $this->get_by_id($faqitemid);
+            if (!$selected) {
+                return false;
+            }
 
-        $transaction = $this->db->start_delegated_transaction();
-        $selectedsortorder = $selected->sortorder;
-        $selected->sortorder = $adjacent->sortorder;
-        $adjacent->sortorder = $selectedsortorder;
-        $this->db->update_record($this->tableitems, $selected);
-        $this->db->update_record($this->tableitems, $adjacent);
-        $transaction->allow_commit();
+            $operator = $down ? '>' : '<';
+            $direction = $down ? 'ASC' : 'DESC';
+            $sql = "SELECT *
+                      FROM {{$this->tableitems}}
+                     WHERE list_id = :listid
+                       AND lang = :lang
+                       AND sortorder $operator :sortorder
+                  ORDER BY sortorder $direction, id $direction";
+            $params = [
+                'listid' => $selected->list_id,
+                'lang' => $selected->lang,
+                'sortorder' => $selected->sortorder,
+            ];
+            $adjacent = $this->db->get_records_sql($sql, $params, 0, 1);
+            if (!$adjacent) {
+                return false;
+            }
+            $adjacent = reset($adjacent);
 
-        return true;
+            $selectedsortorder = $selected->sortorder;
+            $selected->sortorder = $adjacent->sortorder;
+            $adjacent->sortorder = $selectedsortorder;
+            $this->db->update_record($this->tableitems, $selected);
+            $this->db->update_record($this->tableitems, $adjacent);
+
+            return true;
+        });
     }
 }

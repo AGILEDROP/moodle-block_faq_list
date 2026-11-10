@@ -44,6 +44,7 @@ $string['button:editfaqtitle'] = 'Uredi prevod naslova';
 
 $string['cachedef_last_edit'] = 'Zadnje spremenjeni elementi';
 
+$string['error:locktimeout'] = 'Seznam pogostih vprašanj trenutno ureja nekdo drug. Poskusite znova.';
 $string['error:required'] = 'To polje je obvezno.';
 $string['error:unique'] = 'To kratko ime že obstaja.';
 
