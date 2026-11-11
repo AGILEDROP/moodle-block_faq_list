@@ -87,30 +87,24 @@ $PAGE->set_heading($header);
 if ($faqtitleform->is_cancelled()) {
     redirect($redirecturl);
 } else if ($data = $faqtitleform->get_data()) {
-    if ($faqtitleid) {
-        $faqlist->update_title_translation($faqtitleid, $data->title);
-        redirect($redirecturl,
-            get_string('msgfaqtitleupdated', 'block_faq_list'),
-            0,
-            notification::NOTIFY_SUCCESS);
-    } else {
-        try {
+    try {
+        if ($faqtitleid) {
+            // The stored record decides which title is saved, not the submitted hidden values.
+            $faqlist->update_title_translation($faqtitleid, $data->title);
+            $message = get_string('msgfaqtitleupdated', 'block_faq_list');
+        } else {
             $faqlist->add_title_translation($data->list_id, $data->title, $data->faq_lang);
-        } catch (moodle_exception $e) {
-            $expectederrors = ['error:titleexists', 'error:locktimeout', 'msgfaqlistnotexist'];
-            if ($e->module !== 'block_faq_list' || !in_array($e->errorcode, $expectederrors, true)) {
-                throw $e;
-            }
-            if ($e->errorcode === 'msgfaqlistnotexist') {
-                redirect($listsurl, $e->getMessage(), 0, notification::NOTIFY_ERROR);
-            }
-            redirect($redirecturl, $e->getMessage(), 0, notification::NOTIFY_ERROR);
+            $message = get_string('msgfaqtitlecreated', 'block_faq_list');
         }
-        redirect($redirecturl,
-            get_string('msgfaqtitlecreated', 'block_faq_list'),
-            0,
-            notification::NOTIFY_SUCCESS);
+    } catch (moodle_exception $e) {
+        $expectederrors = ['error:titleexists', 'error:locktimeout', 'msgfaqlistnotexist', 'msgfaqtitlenotexist'];
+        if ($e->module !== 'block_faq_list' || !in_array($e->errorcode, $expectederrors, true)) {
+            throw $e;
+        }
+        redirect(in_array($e->errorcode, ['msgfaqlistnotexist', 'msgfaqtitlenotexist']) ? $listsurl : $redirecturl,
+            $e->getMessage(), 0, notification::NOTIFY_ERROR);
     }
+    redirect($redirecturl, $message, 0, notification::NOTIFY_SUCCESS);
 }
 
 echo $OUTPUT->header();

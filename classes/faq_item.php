@@ -80,8 +80,9 @@ class faq_item extends faq_list {
     /**
      * Create new faq list item.
      *
-     * @param stdClass $data Faq list item object.
+     * @param stdClass $data Faq list item object. Needs list_id and faq_lang next to the form values.
      * @return int|false Return id of successfully created faq list item otherwise false.
+     * @throws \moodle_exception If the target list no longer exists.
      * @throws dml_exception
      */
     public function create($data) {
@@ -90,10 +91,15 @@ class faq_item extends faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqlistid = $this->helper->get_last_edit_faq_list_id();
-        $faqlang = $this->helper->get_last_edit_faq_lang();
+        $faqlistid = (int)$data->list_id;
+        $faqlang = (string)$data->faq_lang;
 
         return helper::run_locked_transaction($faqlistid, function () use ($faqlistid, $faqlang, $data) {
+            // List deletion takes the same lock, so an item can't be added to a list that was just deleted.
+            if (!$this->db->record_exists($this->tablelists, ['id' => $faqlistid])) {
+                throw new \moodle_exception('msgfaqlistnotexist', 'block_faq_list');
+            }
+
             // Next position is calculated under the lock, so concurrent creates cannot get the same one.
             $maxsortorder = (int)$this->db->get_field_select(
                 $this->tableitems,
@@ -119,7 +125,7 @@ class faq_item extends faq_list {
      *
      * @param stdClass $data Faq list item object.
      * @return bool True.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the item no longer exists.
      */
     public function update($data) {
         require_sesskey();
@@ -127,13 +133,25 @@ class faq_item extends faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqitemdata = new stdClass();
-        $faqitemdata->id = $data->id;
-        $faqitemdata->question = $data->question;
-        $faqitemdata->answer = $data->answer['text'];
-        $faqitemdata->answer_format = $data->answer['format'];
+        $existing = $this->get_by_id($data->id);
+        if (!$existing) {
+            throw new \moodle_exception('msgfaqitemnotexist', 'block_faq_list');
+        }
 
-        return $this->db->update_record($this->tableitems, $faqitemdata);
+        return helper::run_locked_transaction((int)$existing->list_id, function () use ($data) {
+            // Re-check under the lock: the item may have been deleted since the unlocked read.
+            if (!$this->db->record_exists($this->tableitems, ['id' => $data->id])) {
+                throw new \moodle_exception('msgfaqitemnotexist', 'block_faq_list');
+            }
+
+            $faqitemdata = new stdClass();
+            $faqitemdata->id = $data->id;
+            $faqitemdata->question = $data->question;
+            $faqitemdata->answer = $data->answer['text'];
+            $faqitemdata->answer_format = $data->answer['format'];
+
+            return $this->db->update_record($this->tableitems, $faqitemdata);
+        });
     }
 
     /**

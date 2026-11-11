@@ -209,7 +209,10 @@ echo $OUTPUT->tabtree($tabs, 'faq_lang_' . $faqitem->helper->get_last_edit_faq_l
 
 echo html_writer::table($table);
 
-$actionurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php');
+$actionurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', [
+    'list_id' => $currentlistid,
+    'faq_lang' => $currentfaqlang,
+]);
 echo $OUTPUT->single_button($actionurl,
     get_string('button:addfaqitem', 'block_faq_list'), 'POST', ['type' => 'primary']);
 

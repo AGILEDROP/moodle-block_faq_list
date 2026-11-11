@@ -70,6 +70,8 @@ final class faq_item_test extends advanced_testcase {
         $data = new stdClass();
         $data->question = $question;
         $data->answer = ['text' => 'A', 'format' => FORMAT_HTML];
+        $data->list_id = $this->listid;
+        $data->faq_lang = $this->items->helper->get_last_edit_faq_lang();
         return $this->items->create($data);
     }
 
@@ -268,5 +270,41 @@ final class faq_item_test extends advanced_testcase {
         $this->expectException(\moodle_exception::class);
         $this->expectExceptionMessage(get_string('msgfaqlistnotexist', 'block_faq_list'));
         $this->lists->add_title_translation($this->listid + 1000, 'Orphan', 'en');
+    }
+
+    /**
+     * Creating a question for a missing list is refused and nothing is stored.
+     */
+    public function test_create_item_for_missing_list_is_refused(): void {
+        global $DB;
+        $data = (object)[
+            'question' => 'Orphan',
+            'answer' => ['text' => 'A', 'format' => FORMAT_HTML],
+            'list_id' => $this->listid + 1000,
+            'faq_lang' => 'en',
+        ];
+        try {
+            $this->items->create($data);
+            $this->fail('Exception expected.');
+        } catch (\moodle_exception $e) {
+            $this->assertSame('msgfaqlistnotexist', $e->errorcode);
+        }
+        $this->assertSame(0, $DB->count_records('block_faq_list_item', ['list_id' => $this->listid + 1000]));
+    }
+
+    /**
+     * Updating a missing item or title is refused instead of silently doing nothing.
+     */
+    public function test_update_missing_records_is_refused(): void {
+        $data = (object)['id' => 99999, 'question' => 'Q', 'answer' => ['text' => 'A', 'format' => FORMAT_HTML]];
+        try {
+            $this->items->update($data);
+            $this->fail('Exception expected.');
+        } catch (\moodle_exception $e) {
+            $this->assertSame('msgfaqitemnotexist', $e->errorcode);
+        }
+
+        $this->expectException(\moodle_exception::class);
+        $this->lists->update_title_translation(99999, 'Title');
     }
 }

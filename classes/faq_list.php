@@ -313,7 +313,7 @@ class faq_list {
      * @param int $faqtitleid Id of existing faq title translation.
      * @param string $title Title translation.
      * @return bool True.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the title no longer exists.
      */
     public function update_title_translation($faqtitleid, $title) {
         require_sesskey();
@@ -321,11 +321,23 @@ class faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $data = new stdClass();
-        $data->id = $faqtitleid;
-        $data->title = $title;
+        $existing = $this->get_title_by_id($faqtitleid);
+        if (!$existing) {
+            throw new \moodle_exception('msgfaqtitlenotexist', 'block_faq_list');
+        }
 
-        return $this->db->update_record($this->tabletitles, $data);
+        return helper::run_locked_transaction((int)$existing->list_id, function () use ($faqtitleid, $title) {
+            // Re-check under the lock: the title (or its list) may have been deleted since the unlocked read.
+            if (!$this->db->record_exists($this->tabletitles, ['id' => $faqtitleid])) {
+                throw new \moodle_exception('msgfaqtitlenotexist', 'block_faq_list');
+            }
+
+            $data = new stdClass();
+            $data->id = $faqtitleid;
+            $data->title = $title;
+
+            return $this->db->update_record($this->tabletitles, $data);
+        });
     }
 
     /**
