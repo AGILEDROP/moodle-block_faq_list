@@ -40,7 +40,6 @@ use block_faq_list\faq_list;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_faq_list extends block_base {
-
     /**
      * @var bool $hideblocktitle Determines if the block title will be shown.
      */
@@ -139,7 +138,6 @@ class block_faq_list extends block_base {
                 // Select default template.
                 $templatename = 'block_faq_list/faq_list';
                 break;
-
         }
         $content = $renderer->render_from_template($templatename, $templatecontext);
 
@@ -185,5 +183,4 @@ class block_faq_list extends block_base {
     public function has_config() {
         return true;
     }
-
 }

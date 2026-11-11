@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * File         faq_item_test.php
+ * Encoding     UTF-8
+ *
+ * @package     block_faq_list
+ *
+ * @copyright   Agiledrop, 2024
+ * @author      Matej Pal <matej.pal@agiledrop.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace block_faq_list;
 
 use advanced_testcase;
@@ -30,7 +41,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class faq_item_test extends advanced_testcase {
-
     /** @var faq_item Item API. */
     private $items;
 
@@ -126,8 +136,10 @@ final class faq_item_test extends advanced_testcase {
         $DB->set_field('block_faq_list_item', 'sortorder', 1, ['id' => $c]);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->assertSame([$a, $b, $c], array_values(array_map(fn($x) => (int)$x->id,
-                $this->items->get_items($this->listid, 'en'))));
+            $this->assertSame([$a, $b, $c], array_values(array_map(
+                fn($x) => (int)$x->id,
+                $this->items->get_items($this->listid, 'en')
+            )));
         }
     }
 

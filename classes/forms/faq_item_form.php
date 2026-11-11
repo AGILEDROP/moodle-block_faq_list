@@ -42,7 +42,6 @@ use moodleform;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_item_form extends moodleform {
-
     /**
      * Form definitions.
      *

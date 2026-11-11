@@ -101,8 +101,12 @@ if ($faqtitleform->is_cancelled()) {
         if ($e->module !== 'block_faq_list' || !in_array($e->errorcode, $expectederrors, true)) {
             throw $e;
         }
-        redirect(in_array($e->errorcode, ['msgfaqlistnotexist', 'msgfaqtitlenotexist']) ? $listsurl : $redirecturl,
-            $e->getMessage(), 0, notification::NOTIFY_ERROR);
+        redirect(
+            in_array($e->errorcode, ['msgfaqlistnotexist', 'msgfaqtitlenotexist']) ? $listsurl : $redirecturl,
+            $e->getMessage(),
+            0,
+            notification::NOTIFY_ERROR
+        );
     }
     redirect($redirecturl, $message, 0, notification::NOTIFY_SUCCESS);
 }

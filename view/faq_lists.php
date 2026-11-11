@@ -30,7 +30,7 @@
 use block_faq_list\faq_list;
 
 require('../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 global $CFG, $USER, $DB, $OUTPUT, $PAGE;
 
@@ -69,7 +69,6 @@ $tablerows = [];
 $records = $faqlist->get_all();
 
 foreach ($records as $record) {
-
     // Link to view faq list.
     $urlparams = [
         'list_id' => $record->id,
@@ -79,16 +78,16 @@ foreach ($records as $record) {
     // Link to edit faq froup.
     $editlink = new moodle_url('/blocks/faq_list/view/faq_list_manage.php', $urlparams);
     $editicon = $OUTPUT->action_icon(
-            $editlink,
-            new \pix_icon('t/edit', get_string('button:editfaqlist', 'block_faq_list'))
+        $editlink,
+        new \pix_icon('t/edit', get_string('button:editfaqlist', 'block_faq_list'))
     );
 
     // Link to delete faq list.
     $params = array_merge($urlparams, ['action' => 'deletelist']);
     $deletelink = new moodle_url('/blocks/faq_list/view/faq_list_delete.php', $params);
     $deleteicon = $OUTPUT->action_icon(
-            $deletelink,
-            new \pix_icon('t/delete', get_string('button:deletefaqlist', 'block_faq_list'))
+        $deletelink,
+        new \pix_icon('t/delete', get_string('button:deletefaqlist', 'block_faq_list'))
     );
 
     // Build table row.

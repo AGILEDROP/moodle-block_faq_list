@@ -59,8 +59,12 @@ $listsurl = new moodle_url('/blocks/faq_list/view/faq_lists.php');
 if ($faqitemid) {
     $existingfaqitem = $faqitem->get_by_id($faqitemid);
     if (!$existingfaqitem) {
-        redirect(new moodle_url('/blocks/faq_list/view/faq_list_items.php'),
-            get_string('msgfaqitemnotexist', 'block_faq_list'), 0, notification::NOTIFY_ERROR);
+        redirect(
+            new moodle_url('/blocks/faq_list/view/faq_list_items.php'),
+            get_string('msgfaqitemnotexist', 'block_faq_list'),
+            0,
+            notification::NOTIFY_ERROR
+        );
     }
     $listid = (int)$existingfaqitem->list_id;
     $lang = $existingfaqitem->lang;
@@ -115,8 +119,12 @@ if ($faqitemform->is_cancelled()) {
         if ($e->module !== 'block_faq_list' || !in_array($e->errorcode, $expectederrors, true)) {
             throw $e;
         }
-        redirect($e->errorcode === 'msgfaqlistnotexist' ? $listsurl : $redirecturl,
-            $e->getMessage(), 0, notification::NOTIFY_ERROR);
+        redirect(
+            $e->errorcode === 'msgfaqlistnotexist' ? $listsurl : $redirecturl,
+            $e->getMessage(),
+            0,
+            notification::NOTIFY_ERROR
+        );
     }
     redirect($redirecturl, $message, 0, notification::NOTIFY_SUCCESS);
 }

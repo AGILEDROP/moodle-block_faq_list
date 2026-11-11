@@ -67,15 +67,19 @@ if ($data = $faqlistdeleteform->get_data()) {
     // Validation.
     if ($data->id) {
         $faqlist->delete($data->id);
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqlistdeleted', 'block_faq_list'),
             0,
-            'info');
+            'info'
+        );
     } else {
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqlistnotexist', 'block_faq_list'),
             0,
-            'error');
+            'error'
+        );
     }
 }
 

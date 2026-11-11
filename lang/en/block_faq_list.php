@@ -45,8 +45,8 @@ $string['button:editfaqtitle'] = 'Edit title translation';
 $string['cachedef_last_edit'] = 'Last edited items';
 
 $string['error:locktimeout'] = 'The FAQ list is being modified by someone else. Please try again.';
-$string['error:titleexists'] = 'A title for this language already exists. Edit the existing title instead.';
 $string['error:required'] = 'This field is required.';
+$string['error:titleexists'] = 'A title for this language already exists. Edit the existing title instead.';
 $string['error:unique'] = 'This shortname already exist.';
 
 $string['faq_list:addinstance'] = 'Add instance';

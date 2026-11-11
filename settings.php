@@ -38,14 +38,22 @@ global $ADMIN;
 // been denied it does not get a menu entry that leads to a permission error.
 $ADMIN->add('root', new admin_category('block_faq_list', get_string('admin:faqcategorytitle', 'block_faq_list')));
 
-$ADMIN->add('block_faq_list',
-    new admin_externalpage('faq_list',
+$ADMIN->add(
+    'block_faq_list',
+    new admin_externalpage(
+        'faq_list',
         get_string('admin:faqmanagelist', 'block_faq_list'),
         new moodle_url('/blocks/faq_list/view/faq_lists.php'),
-        'block/faq_list:read'));
+        'block/faq_list:read'
+    )
+);
 
-$ADMIN->add('block_faq_list',
-    new admin_externalpage('faq_list_items',
+$ADMIN->add(
+    'block_faq_list',
+    new admin_externalpage(
+        'faq_list_items',
         get_string('admin:faqmanageitem', 'block_faq_list'),
         new moodle_url('/blocks/faq_list/view/faq_list_items.php'),
-        'block/faq_list:read'));
+        'block/faq_list:read'
+    )
+);

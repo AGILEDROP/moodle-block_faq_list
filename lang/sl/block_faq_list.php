@@ -45,8 +45,8 @@ $string['button:editfaqtitle'] = 'Uredi prevod naslova';
 $string['cachedef_last_edit'] = 'Zadnje spremenjeni elementi';
 
 $string['error:locktimeout'] = 'Seznam pogostih vprašanj trenutno ureja nekdo drug. Poskusite znova.';
-$string['error:titleexists'] = 'Naslov za ta jezik že obstaja. Uredite obstoječi naslov.';
 $string['error:required'] = 'To polje je obvezno.';
+$string['error:titleexists'] = 'Naslov za ta jezik že obstaja. Uredite obstoječi naslov.';
 $string['error:unique'] = 'To kratko ime že obstaja.';
 
 $string['faq_list:addinstance'] = 'Dodaj instanco';
