@@ -61,22 +61,6 @@ class faq_item extends faq_list {
     }
 
     /**
-     * Get all faq list items (questions and answers) for selected faq list and language.
-     *
-     * @param int $faqlistid Id of selected faq list.
-     * @param string $lang Selected language, default is current language.
-     * @return array Array of faq list items object.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
-     */
-    public function get_items($faqlistid, $lang = null) {
-        $conditions = [
-                'list_id' => $faqlistid,
-                'lang' => $lang,
-        ];
-        return $this->db->get_records($this->tableitems, $conditions, 'sortorder, id');
-    }
-
-    /**
      * Get number of faq list items for selected faq list.
      *
      * @param int $faqlistid Id of selected faq list.
