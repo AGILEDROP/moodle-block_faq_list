@@ -53,11 +53,17 @@ echo $OUTPUT->header();
 $faqlist = new faq_list();
 $table = new html_table();
 
-$table->head = [
-    get_string('label:colshortname', 'block_faq_list'),
-    get_string('label:colactionedit', 'block_faq_list'),
-    get_string('label:colactiondelete', 'block_faq_list'),
-];
+// Controls follow the user's capabilities. The server still checks them on every action.
+$canmodify = has_capability('block/faq_list:createormodify', $context);
+$candelete = has_capability('block/faq_list:delete', $context);
+
+$table->head = [get_string('label:colshortname', 'block_faq_list')];
+if ($canmodify) {
+    $table->head[] = get_string('label:colactionedit', 'block_faq_list');
+}
+if ($candelete) {
+    $table->head[] = get_string('label:colactiondelete', 'block_faq_list');
+}
 
 $tablerows = [];
 $records = $faqlist->get_all();
@@ -86,11 +92,13 @@ foreach ($records as $record) {
     );
 
     // Build table row.
-    $row = [
-        html_writer::link($urlview, s($record->shortname)),
-        $editicon,
-        $deleteicon,
-    ];
+    $row = [html_writer::link($urlview, s($record->shortname))];
+    if ($canmodify) {
+        $row[] = $editicon;
+    }
+    if ($candelete) {
+        $row[] = $deleteicon;
+    }
     $tablerows[] = $row;
 }
 
@@ -99,6 +107,8 @@ $table->data = $tablerows;
 echo html_writer::table($table);
 
 $urlaction = new moodle_url('/blocks/faq_list/view/faq_list_manage.php');
-echo $OUTPUT->single_button($urlaction, get_string('header:faqlistadd', 'block_faq_list'), 'POST', ['type' => 'primary']);
+if ($canmodify) {
+    echo $OUTPUT->single_button($urlaction, get_string('header:faqlistadd', 'block_faq_list'), 'POST', ['type' => 'primary']);
+}
 
 echo $OUTPUT->footer();

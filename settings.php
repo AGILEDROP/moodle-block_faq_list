@@ -33,17 +33,19 @@ require_once($CFG->libdir . '/adminlib.php');
 
 global $ADMIN;
 
-if ($hassiteconfig) {
+// Moodle only loads a block's settings.php for users with moodle/site:config, so this menu is reachable
+// by them. Each page additionally requires the plugin's own capability, so a site administrator who has
+// been denied it does not get a menu entry that leads to a permission error.
+$ADMIN->add('root', new admin_category('block_faq_list', get_string('admin:faqcategorytitle', 'block_faq_list')));
 
-    $ADMIN->add('root', new admin_category('block_faq_list', get_string('admin:faqcategorytitle', 'block_faq_list')));
-
-    $ADMIN->add('block_faq_list',
-        new admin_externalpage('faq_list',
+$ADMIN->add('block_faq_list',
+    new admin_externalpage('faq_list',
         get_string('admin:faqmanagelist', 'block_faq_list'),
-        new moodle_url('/blocks/faq_list/view/faq_lists.php')));
+        new moodle_url('/blocks/faq_list/view/faq_lists.php'),
+        'block/faq_list:read'));
 
-    $ADMIN->add('block_faq_list',
-        new admin_externalpage('faq_list_items',
-            get_string('admin:faqmanageitem', 'block_faq_list'),
-            new moodle_url('/blocks/faq_list/view/faq_list_items.php')));
-}
+$ADMIN->add('block_faq_list',
+    new admin_externalpage('faq_list_items',
+        get_string('admin:faqmanageitem', 'block_faq_list'),
+        new moodle_url('/blocks/faq_list/view/faq_list_items.php'),
+        'block/faq_list:read'));
