@@ -56,6 +56,10 @@ final class faq_item_test extends advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest(true);
+        // On PostgreSQL every test runs inside one outer transaction that is rolled back at the end. Our code
+        // starts its own transactions and relies on them really committing or rolling back, and a nested
+        // rollback would also poison the outer one. Reset the slow way instead.
+        $this->preventResetByRollback();
         $this->setAdminUser();
         $_POST['sesskey'] = sesskey();
 
