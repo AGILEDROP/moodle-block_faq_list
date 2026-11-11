@@ -278,21 +278,33 @@ class faq_list {
      *
      * @param int $faqlistid Id of faq list.
      * @param string $title Title translation.
+     * @param string $lang Language of the title.
      * @return bool|int Return id of title translation otherwise false.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the list is gone or a title for this list and language already exists.
      */
-    public function add_title_translation($faqlistid, $title) {
+    public function add_title_translation($faqlistid, $title, string $lang) {
         require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $data = new stdClass();
-        $data->list_id = $faqlistid;
-        $data->lang = $this->helper->get_last_edit_faq_lang();
-        $data->title = $title;
+        return helper::run_locked_transaction((int)$faqlistid, function () use ($faqlistid, $lang, $title) {
+            // List deletion takes the same lock, so this check cannot race with it and leave an orphan title.
+            if (!$this->db->record_exists($this->tablelists, ['id' => $faqlistid])) {
+                throw new \moodle_exception('msgfaqlistnotexist', 'block_faq_list');
+            }
+            // Checked under the lock: a second form submitted at the same time cannot slip in a duplicate.
+            if ($this->db->record_exists($this->tabletitles, ['list_id' => $faqlistid, 'lang' => $lang])) {
+                throw new \moodle_exception('error:titleexists', 'block_faq_list');
+            }
 
-        return $this->db->insert_record($this->tabletitles, $data, true);
+            $data = new stdClass();
+            $data->list_id = $faqlistid;
+            $data->lang = $lang;
+            $data->title = $title;
+
+            return $this->db->insert_record($this->tabletitles, $data, true);
+        });
     }
 
     /**

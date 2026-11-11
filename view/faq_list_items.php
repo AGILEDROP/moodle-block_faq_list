@@ -50,7 +50,7 @@ $faqitem = new faq_item();
 $action = optional_param('action', null, PARAM_ALPHA);
 
 $faqlistid = optional_param('list_id', null, PARAM_INT);
-$faqlang = optional_param('faq_lang', null, PARAM_ALPHA);
+$faqlang = optional_param('faq_lang', null, PARAM_ALPHANUMEXT);
 $faqitemid = optional_param('faq_item_id', null, PARAM_INT);
 
 if ($faqlistid) {
@@ -193,7 +193,10 @@ if ($currentfaqlisttitle) {
         get_string('button:editfaqtitle', 'block_faq_list'), 'POST', ['type' => 'secondary']);
 
 } else {
-    $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php');
+    $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php', [
+        'list_id' => $currentlistid,
+        'faq_lang' => $currentfaqlang,
+    ]);
     echo $OUTPUT->single_button($actionurl,
         get_string('button:addfaqtitle', 'block_faq_list'), 'POST', ['type' => 'primary']);
 

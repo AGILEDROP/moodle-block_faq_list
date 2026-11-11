@@ -58,5 +58,39 @@ function xmldb_block_faq_list_upgrade($oldversion): bool {
         upgrade_block_savepoint(true, 2024112700, 'faq_list');
     }
 
+    if ($oldversion < 2025011401) {
+        $table = new xmldb_table('block_faq_list_title');
+        $index = new xmldb_index('list_lang', XMLDB_INDEX_UNIQUE, ['list_id', 'lang']);
+
+        if (!$dbman->index_exists($table, $index)) {
+            // Keep the lowest-id translation for each list and language.
+            // Delete the other translations, even if their title text differs, before adding the unique index.
+            $duplicates = $DB->get_records_sql(
+                "SELECT MIN(id) AS keepid, list_id, lang
+                   FROM {block_faq_list_title}
+               GROUP BY list_id, lang
+                 HAVING COUNT(*) > 1"
+            );
+
+            $transaction = $DB->start_delegated_transaction();
+            foreach ($duplicates as $duplicate) {
+                $DB->delete_records_select(
+                    'block_faq_list_title',
+                    'list_id = :listid AND lang = :lang AND id <> :keepid',
+                    [
+                        'listid' => $duplicate->list_id,
+                        'lang' => $duplicate->lang,
+                        'keepid' => $duplicate->keepid,
+                    ]
+                );
+            }
+            $transaction->allow_commit();
+
+            $dbman->add_index($table, $index);
+        }
+
+        upgrade_block_savepoint(true, 2025011401, 'faq_list');
+    }
+
     return true;
 }
