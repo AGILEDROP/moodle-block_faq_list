@@ -58,6 +58,20 @@ class faq_item_move_form extends moodleform {
     }
 
     /**
+     * Unique identifier per rendered form.
+     *
+     * The list page renders one move form per item and direction. The default identifier is the class
+     * name, so every form would share the same submission marker field and form name. Appending the
+     * action and item id makes each one unique. Custom data is already set when this is called.
+     *
+     * @return string
+     */
+    protected function get_form_identifier() {
+        $suffix = ($this->_customdata['action'] ?? '') . '_' . ($this->_customdata['faq_item_id'] ?? '');
+        return parent::get_form_identifier() . '_' . preg_replace('/[^a-z0-9_]/i', '_', $suffix);
+    }
+
+    /**
      * Form definitions.
      *
      * @return void
@@ -75,10 +89,6 @@ class faq_item_move_form extends moodleform {
         $mform->setType('action', PARAM_ALPHA);
         $mform->setDefault('action', $this->_customdata['action'] ?? null);
 
-        $mform->addElement('hidden', 'sesskey');
-        $mform->setType('sesskey', PARAM_RAW);
-        $mform->setDefault('sesskey', sesskey());
-
         $iconname = ($this->_customdata['action'] === 'moveitemup') ? 't/up' : 't/down';
         $iconurl = $OUTPUT->image_url($iconname);
         $buttonhtml = html_writer::empty_tag('input', [
@@ -87,6 +97,7 @@ class faq_item_move_form extends moodleform {
             'alt' => get_string('button:editfaqitem', 'block_faq_list'),
             'title' => get_string('button:editfaqitem', 'block_faq_list'),
             'class' => 'action-icon',
+            'id' => $this->get_form_identifier() . '_button',
         ]);
         $mform->addElement('html', $buttonhtml);
     }
