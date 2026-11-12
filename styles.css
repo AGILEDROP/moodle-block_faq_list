@@ -37,6 +37,11 @@
 }
 
 /* Slider view mode styles. */
+.block_faq_list .faq-wrapper .carousel-item .card-title {
+    margin-bottom: 0;
+    padding: 1rem 1rem 0;
+}
+
 .block_faq_list .faq-wrapper .carousel-indicators li {
     background-color: #000;
 }
