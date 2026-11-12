@@ -23,22 +23,25 @@
     {
         "show_title": true,
         "faq_title": "FAQ Block Title",
-        "faq_items": {
-            "itemnumber": 0,
-            "id": 5,
-            "question": "Question?",
-            "answer": "<p>Answer.</p>",
-        },
+        "blockid": 12,
+        "faq_items": [
+            {
+                "itemnumber": 0,
+                "id": 5,
+                "question": "Question?",
+                "answer": "<p>Answer.</p>"
+            }
+        ]
     }
 }}
 <div class="faq-wrapper">
     {{#show_title}}
-        <h2>{{faq_title}}</h2>
+        <h2>{{{faq_title}}}</h2>
     {{/show_title}}
 
     {{#faq_items}}
         <div class="mb-3">
-            <h3 class="h5">{{question}}</h3>
+            <h3 class="h5">{{{question}}}</h3>
             <div>{{{answer}}}</div>
         </div>
     {{/faq_items}}

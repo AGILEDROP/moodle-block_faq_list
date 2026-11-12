@@ -40,7 +40,6 @@ use block_faq_list\faq_list;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_faq_list extends block_base {
-
     /**
      * @var bool $hideblocktitle Determines if the block title will be shown.
      */
@@ -70,24 +69,15 @@ class block_faq_list extends block_base {
      * @throws dml_exception
      */
     public function specialization() {
-        $showblocktitle = false;
-        $showfaqtitle = false;
+        $showblocktitle = $this->config->block_title ?? false;
 
-        if (isset($this->config->block_title)) {
-            $showblocktitle = $this->config->block_title;
-        }
-
-        if (isset($this->config->show_faq_title)) {
-            $showfaqtitle = (bool)$this->config->block_title;
-        }
-
-        if ($showblocktitle === 'faqlisttitle') {
+        if ($showblocktitle === 'faqlisttitle' && !empty($this->config->faq_list_id)) {
             $faqlist = new faq_list();
             $title = $faqlist->get_title($this->config->faq_list_id);
             if ($title) {
                 $titletext = $title->title;
                 if (!empty($titletext)) {
-                    $this->title = $title->title;
+                    $this->title = format_string($titletext, true, ['context' => context_system::instance()]);
                     $this->hideblocktitle = false;
                 }
             }
@@ -106,6 +96,11 @@ class block_faq_list extends block_base {
             return $this->content;
         }
 
+        if (empty($this->config->faq_list_id)) {
+            $this->content = (object) ['text' => '', 'footer' => ''];
+            return $this->content;
+        }
+
         $faqlist = new faq_list();
 
         $faqlistid = $this->config->faq_list_id;
@@ -121,6 +116,8 @@ class block_faq_list extends block_base {
         }
 
         $templatecontext = $faqlist->export_faq_list_by_id($faqlistid, $titleshow);
+        // Unique per block instance, so HTML ids don't clash when the same FAQ list is shown in several blocks.
+        $templatecontext['blockid'] = (int)$this->instance->id;
 
         $renderer = $this->page->get_renderer('core');
 
@@ -137,7 +134,6 @@ class block_faq_list extends block_base {
                 // Select default template.
                 $templatename = 'block_faq_list/faq_list';
                 break;
-
         }
         $content = $renderer->render_from_template($templatename, $templatecontext);
 
@@ -183,5 +179,4 @@ class block_faq_list extends block_base {
     public function has_config() {
         return true;
     }
-
 }

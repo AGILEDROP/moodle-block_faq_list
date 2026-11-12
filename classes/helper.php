@@ -44,7 +44,6 @@ use moodle_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class helper {
-
     /** @var cache Instance of cache. */
     private $cache;
 
@@ -146,5 +145,43 @@ class helper {
             );
         }
         return $tabs;
+    }
+
+    /**
+     * Run a callback while holding an exclusive lock for a faq list, inside a database transaction.
+     *
+     * The lock serialises concurrent ordering changes (create, move, delete) on the same faq list across
+     * requests and cluster nodes. A transaction alone cannot do that, because two transactions can both read
+     * the same positions before either writes. The lock is taken before the transaction starts, so the
+     * callback always sees data committed by the previous lock holder, and it is released after commit or
+     * rollback.
+     *
+     * @param int $faqlistid Id of the faq list to lock.
+     * @param callable $callback Work to do while holding the lock.
+     * @return mixed Whatever the callback returns.
+     * @throws moodle_exception If the lock cannot be acquired.
+     * @throws \Throwable Anything thrown by the callback, after the transaction is rolled back.
+     */
+    public static function run_locked_transaction(int $faqlistid, callable $callback) {
+        global $DB;
+
+        $lockfactory = \core\lock\lock_config::get_lock_factory('block_faq_list');
+        $lock = $lockfactory->get_lock('list_' . $faqlistid, 10);
+        if (!$lock) {
+            throw new moodle_exception('error:locktimeout', 'block_faq_list');
+        }
+
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            try {
+                $result = $callback();
+            } catch (\Throwable $e) {
+                $transaction->rollback($e instanceof \Exception ? $e : new \Exception($e->getMessage(), 0, $e));
+            }
+            $transaction->allow_commit();
+            return $result;
+        } finally {
+            $lock->release();
+        }
     }
 }

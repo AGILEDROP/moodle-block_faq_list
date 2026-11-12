@@ -69,18 +69,21 @@ if ($faqlistform->is_cancelled()) {
     // Validation.
     if ($data->id) {
         $faqlist->update($data);
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqlistupdated', 'block_faq_list'),
             0,
-            notification::NOTIFY_SUCCESS);
+            notification::NOTIFY_SUCCESS
+        );
     } else {
         $faqlist->create($data);
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqlistcreated', 'block_faq_list'),
             0,
-            notification::NOTIFY_SUCCESS);
+            notification::NOTIFY_SUCCESS
+        );
     }
-
 }
 
 if ($faqlistid) {
@@ -89,7 +92,8 @@ if ($faqlistid) {
     if ($existingfaqlist) {
         $faqlistform->set_data($existingfaqlist);
     } else {
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqlistnotexist', 'block_faq_list'),
             0,
             notification::NOTIFY_ERROR

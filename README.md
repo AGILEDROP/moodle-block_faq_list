@@ -37,15 +37,25 @@ Accessible via **Site Administration -> General -> FAQ Lists**, the plugin offer
 - FAQ titles and items (questions and answers) can be translated into multiple languages.
 - Admin interface includes tabs for each installed language pack, making translation simple and intuitive.
 
+## Compatibility
+
+This release supports Moodle 5.0–5.3. For Moodle 4.0–4.5, choose a compatible release from the [Moodle Marketplace](https://marketplace.moodle.com/plugins/3109).
+
+See the [changelog](CHANGES.md) for release changes and upgrade notes.
+
 ## Installation
 
-1. Clone or download the repository into the appropriate Moodle directory:
+For a manual installation or Git checkout, use the `blocks/` directory inside Moodle's web root (`public/blocks/` if the web root is `public/`).
 
-```
-git clone https://github.com/AGILEDROP/moodle-block_faq_list.git faq_list
+**ZIP.** Download the plugin ZIP from the Moodle Marketplace and upload it under **Site administration → Plugins → Install plugins**. To install it manually, extract the `faq_list` folder into Moodle's blocks directory.
+
+**Git.** From Moodle's blocks directory, run the following command.
+
+```bash
+git clone --branch master https://github.com/AGILEDROP/moodle-block_faq_list.git faq_list
 ```
 
-2. In Moodle, navigate to **Site Administration -> Notifications** and follow the prompts to install the plugin.
+After placing the files there, go to **Site administration → Notifications** to complete the installation.
 
 ## Usage
 

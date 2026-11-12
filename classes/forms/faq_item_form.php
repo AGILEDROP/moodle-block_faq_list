@@ -42,7 +42,6 @@ use moodleform;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_item_form extends moodleform {
-
     /**
      * Form definitions.
      *
@@ -55,6 +54,12 @@ class faq_item_form extends moodleform {
         // Existing faq_item id.
         $mform->addElement('hidden', 'id', 0);
         $mform->setType('id', PARAM_INT);
+
+        // Target faq list and language, fixed when the form is opened (not read from the session on submit).
+        $mform->addElement('hidden', 'list_id', 0);
+        $mform->setType('list_id', PARAM_INT);
+        $mform->addElement('hidden', 'faq_lang', '');
+        $mform->setType('faq_lang', PARAM_ALPHANUMEXT);
 
         // Question.
         $mform->addElement('text', 'question', get_string('label:faqquestion', 'block_faq_list'));
@@ -92,6 +97,18 @@ class faq_item_form extends moodleform {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
+
+        // A new question needs an existing list and an installed language. For an existing question the
+        // page takes both from the stored record, so the submitted values are not used.
+        if (empty($data['id'])) {
+            $faqlist = new \block_faq_list\faq_list();
+            $lang = $data['faq_lang'] ?? '';
+            if (empty($data['list_id']) || !$faqlist->get_by_id($data['list_id'])) {
+                $errors['question'] = get_string('msgfaqlistnotexist', 'block_faq_list');
+            } else if (!isset(get_string_manager()->get_list_of_translations()[$lang])) {
+                $errors['question'] = get_string('invalidlanguagecode', 'error', s($lang));
+            }
+        }
 
         return $errors;
     }

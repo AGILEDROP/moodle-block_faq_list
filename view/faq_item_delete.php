@@ -54,6 +54,15 @@ $redirecturl  = new moodle_url('/blocks/faq_list/view/faq_list_items.php', []);
 
 if ($faqitemid) {
     $faqitemdata = $faqitem->get_by_id($faqitemid);
+    if (!$faqitemdata) {
+        redirect(
+            $redirecturl,
+            get_string('msgfaqitemnotexist', 'block_faq_list'),
+            0,
+            'error'
+        );
+    }
+    $faqitemdata->question = format_string($faqitemdata->question ?? '', true, ['context' => $context]);
     $faqitemdeleteform = new faq_item_delete_form();
     $faqitemdeleteform->set_data($faqitemdata);
 } else {
@@ -67,15 +76,19 @@ if ($data = $faqitemdeleteform->get_data()) {
     // Validation.
     if ($data->id) {
         $faqitem->delete($data->id);
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqitemdeleted', 'block_faq_list'),
             0,
-            'info');
+            'info'
+        );
     } else {
-        redirect($redirecturl,
+        redirect(
+            $redirecturl,
             get_string('msgfaqitemnotexist', 'block_faq_list'),
             0,
-            'error');
+            'error'
+        );
     }
 }
 

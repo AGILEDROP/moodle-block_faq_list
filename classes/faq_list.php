@@ -48,7 +48,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_list {
-
     /** @var moodle_database Database connection. */
     public $db;
 
@@ -153,7 +152,7 @@ class faq_list {
                 'lang' => $lang,
         ];
 
-        return $this->db->get_records($this->tableitems, $conditions, 'sortorder');
+        return $this->db->get_records($this->tableitems, $conditions, 'sortorder, id');
     }
 
     /**
@@ -208,9 +207,12 @@ class faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:delete', $context);
 
-        $this->db->delete_records($this->tablelists, ['id' => $id]);
-        $this->db->delete_records($this->tabletitles, ['list_id' => $id]);
-        $this->db->delete_records($this->tableitems, ['list_id' => $id]);
+        // One lock and one transaction: either the list, its titles and its items all go, or none do.
+        helper::run_locked_transaction((int)$id, function () use ($id) {
+            $this->db->delete_records($this->tableitems, ['list_id' => $id]);
+            $this->db->delete_records($this->tabletitles, ['list_id' => $id]);
+            $this->db->delete_records($this->tablelists, ['id' => $id]);
+        });
     }
 
     /**
@@ -275,21 +277,33 @@ class faq_list {
      *
      * @param int $faqlistid Id of faq list.
      * @param string $title Title translation.
+     * @param string $lang Language of the title.
      * @return bool|int Return id of title translation otherwise false.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the list is gone or a title for this list and language already exists.
      */
-    public function add_title_translation($faqlistid, $title) {
+    public function add_title_translation($faqlistid, $title, string $lang) {
         require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $data = new stdClass();
-        $data->list_id = $faqlistid;
-        $data->lang = $this->helper->get_last_edit_faq_lang();
-        $data->title = $title;
+        return helper::run_locked_transaction((int)$faqlistid, function () use ($faqlistid, $lang, $title) {
+            // List deletion takes the same lock, so this check cannot race with it and leave an orphan title.
+            if (!$this->db->record_exists($this->tablelists, ['id' => $faqlistid])) {
+                throw new \moodle_exception('msgfaqlistnotexist', 'block_faq_list');
+            }
+            // Checked under the lock: a second form submitted at the same time cannot slip in a duplicate.
+            if ($this->db->record_exists($this->tabletitles, ['list_id' => $faqlistid, 'lang' => $lang])) {
+                throw new \moodle_exception('error:titleexists', 'block_faq_list');
+            }
 
-        return $this->db->insert_record($this->tabletitles, $data, true);
+            $data = new stdClass();
+            $data->list_id = $faqlistid;
+            $data->lang = $lang;
+            $data->title = $title;
+
+            return $this->db->insert_record($this->tabletitles, $data, true);
+        });
     }
 
     /**
@@ -298,7 +312,7 @@ class faq_list {
      * @param int $faqtitleid Id of existing faq title translation.
      * @param string $title Title translation.
      * @return bool True.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the title no longer exists.
      */
     public function update_title_translation($faqtitleid, $title) {
         require_sesskey();
@@ -306,11 +320,23 @@ class faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $data = new stdClass();
-        $data->id = $faqtitleid;
-        $data->title = $title;
+        $existing = $this->get_title_by_id($faqtitleid);
+        if (!$existing) {
+            throw new \moodle_exception('msgfaqtitlenotexist', 'block_faq_list');
+        }
 
-        return $this->db->update_record($this->tabletitles, $data);
+        return helper::run_locked_transaction((int)$existing->list_id, function () use ($faqtitleid, $title) {
+            // Re-check under the lock: the title (or its list) may have been deleted since the unlocked read.
+            if (!$this->db->record_exists($this->tabletitles, ['id' => $faqtitleid])) {
+                throw new \moodle_exception('msgfaqtitlenotexist', 'block_faq_list');
+            }
+
+            $data = new stdClass();
+            $data->id = $faqtitleid;
+            $data->title = $title;
+
+            return $this->db->update_record($this->tabletitles, $data);
+        });
     }
 
     /**
@@ -335,18 +361,26 @@ class faq_list {
         $data['show_title'] = $showtitle;
 
         if ($showtitle && $faqlisttitle) {
-            $data['faq_title'] = $faqlisttitle->title;
+            $data['faq_title'] = format_string($faqlisttitle->title, true, ['context' => \context_system::instance()]);
         } else {
             $data['faq_title'] = '';
         }
 
+        $context = \context_system::instance();
+
         $itemnumber = 0;
         foreach ($faqlistitems as $faqlistitem) {
+            // Apply the stored format, filters and HTML cleaning.
+            $answer = format_text(
+                $faqlistitem->answer ?? '',
+                $faqlistitem->answer_format ?? FORMAT_HTML,
+                ['context' => $context]
+            );
             $item = [
                 'itemnumber' => $itemnumber,
                 'id' => $faqlistitem->id,
-                'question' => $faqlistitem->question,
-                'answer' => $faqlistitem->answer,
+                'question' => format_string($faqlistitem->question ?? '', true, ['context' => $context]),
+                'answer' => $answer,
             ];
             $data['faq_items'][] = $item;
             $itemnumber++;
