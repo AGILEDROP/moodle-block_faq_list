@@ -69,18 +69,9 @@ class block_faq_list extends block_base {
      * @throws dml_exception
      */
     public function specialization() {
-        $showblocktitle = false;
-        $showfaqtitle = false;
+        $showblocktitle = $this->config->block_title ?? false;
 
-        if (isset($this->config->block_title)) {
-            $showblocktitle = $this->config->block_title;
-        }
-
-        if (isset($this->config->show_faq_title)) {
-            $showfaqtitle = (bool)$this->config->block_title;
-        }
-
-        if ($showblocktitle === 'faqlisttitle') {
+        if ($showblocktitle === 'faqlisttitle' && !empty($this->config->faq_list_id)) {
             $faqlist = new faq_list();
             $title = $faqlist->get_title($this->config->faq_list_id);
             if ($title) {
@@ -102,6 +93,11 @@ class block_faq_list extends block_base {
      */
     public function get_content() {
         if ($this->content !== null) {
+            return $this->content;
+        }
+
+        if (empty($this->config->faq_list_id)) {
+            $this->content = (object) ['text' => '', 'footer' => ''];
             return $this->content;
         }
 
