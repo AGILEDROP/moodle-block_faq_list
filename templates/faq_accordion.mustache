@@ -43,13 +43,12 @@
         {{#faq_items}}
             <div class="accordion-item bg-light border-radius mb-3">
                 <h3 class="accordion-header mb-0 fs" id="faq-heading-{{{blockid}}}-{{{id}}}">
-                    <button class="accordion-button w-100 d-flex align-items-center p-3 pr-6 text-left font-weight-bold {{#itemnumber}}collapsed{{/itemnumber}}" type="button" data-toggle="collapse" data-target="#faq-content-{{{blockid}}}-{{{id}}}" aria-expanded="{{^itemnumber}}true{{/itemnumber}}{{#itemnumber}}false{{/itemnumber}}" aria-controls="faq-content-{{{blockid}}}-{{{id}}}">
+                    <button class="accordion-button w-100 d-flex align-items-center p-3 pr-3 text-left font-weight-bold {{#itemnumber}}collapsed{{/itemnumber}}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-{{{blockid}}}-{{{id}}}" aria-expanded="{{^itemnumber}}true{{/itemnumber}}{{#itemnumber}}false{{/itemnumber}}" aria-controls="faq-content-{{{blockid}}}-{{{id}}}">
                         {{{question}}}
-                        {{#pix}} t/expandedchevron, core {{/pix}}
                     </button>
                 </h3>
 
-                <div id="faq-content-{{{blockid}}}-{{{id}}}" class="accordion-collapse border-top collapse {{^itemnumber}}show{{/itemnumber}}" aria-labelledby="faq-heading-{{{blockid}}}-{{{id}}}" data-parent="#faq-accordion-{{{blockid}}}">
+                <div id="faq-content-{{{blockid}}}-{{{id}}}" class="accordion-collapse border-top collapse {{^itemnumber}}show{{/itemnumber}}" aria-labelledby="faq-heading-{{{blockid}}}-{{{id}}}" data-bs-parent="#faq-accordion-{{{blockid}}}">
                     <div class="accordion-body p-3">
                         {{{answer}}}
                     </div>
