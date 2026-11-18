@@ -45,17 +45,29 @@ See the [changelog](CHANGES.md) for release changes and upgrade notes.
 
 ## Installation
 
-For a manual installation or Git checkout, use the `blocks/` directory inside Moodle's web root (`public/blocks/` if the web root is `public/`).
+### Composer
 
-**ZIP.** Download the plugin ZIP from the Moodle Marketplace and upload it under **Site administration → Plugins → Install plugins**. To install it manually, extract the `faq_list` folder into Moodle's blocks directory.
-
-**Git.** From Moodle's blocks directory, run the following command.
+Once a stable release is available on Packagist, run this command from the root of your Composer-managed Moodle project:
 
 ```bash
-git clone --branch master https://github.com/AGILEDROP/moodle-block_faq_list.git faq_list
+composer require agiledrop/moodle-block_faq_list
 ```
 
-After placing the files there, go to **Site administration → Notifications** to complete the installation.
+### ZIP
+
+Choose a release compatible with your Moodle version. Open **Site administration → Plugins → Install plugins**, upload the plugin ZIP and follow the installation prompts.
+
+### Manual or Git installation
+
+Extract the plugin or check out the matching release from the [GitHub repository](https://github.com/AGILEDROP/moodle-block_faq_list) into `blocks/faq_list/` under Moodle's web root. If your project uses a `public/` web root, the path from the project root is `public/blocks/faq_list/`. The directory should contain the plugin's `version.php`.
+
+### Complete the installation
+
+After installing the files with Composer, manually or with Git, open **Site administration → Notifications**. Alternatively, run the following command from the Moodle project root:
+
+```bash
+php admin/cli/upgrade.php
+```
 
 ## Usage
 
