@@ -41,7 +41,6 @@ use block_faq_list\faq_list;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_faq_list_edit_form extends block_edit_form {
-
     /**
      * Form definitions for each block instance
      * @param MoodleQuickForm $mform
@@ -57,10 +56,11 @@ class block_faq_list_edit_form extends block_edit_form {
 
         // Selected faq list.
         $availablefaqlists = $faqlist->get_available_faq_list_dropdown_options();
-        $mform->addElement('select',
-                'config_faq_list_id',
-                get_string('label:configfaqlistid', 'block_faq_list'),
-                $availablefaqlists,
+        $mform->addElement(
+            'select',
+            'config_faq_list_id',
+            get_string('label:configfaqlistid', 'block_faq_list'),
+            $availablefaqlists,
         );
         $mform->addHelpButton('config_faq_list_id', 'label:configfaqlistid', 'block_faq_list');
         $mform->setType('config_faq_list_id', PARAM_ALPHANUM);
@@ -75,10 +75,11 @@ class block_faq_list_edit_form extends block_edit_form {
                 'pluginname' => get_string('label:configblocktitlepluginname', 'block_faq_list'),
                 'faqlisttitle' => get_string('label:configblocktitlefaq', 'block_faq_list'),
         ];
-        $mform->addElement('select',
-                'config_block_title',
-                get_string('label:configblocktitle', 'block_faq_list'),
-                $availableblocktitles,
+        $mform->addElement(
+            'select',
+            'config_block_title',
+            get_string('label:configblocktitle', 'block_faq_list'),
+            $availableblocktitles,
         );
         $mform->addHelpButton('config_block_title', 'label:configblocktitle', 'block_faq_list');
         $mform->setType('config_block_title', PARAM_ALPHANUM);
@@ -106,10 +107,11 @@ class block_faq_list_edit_form extends block_edit_form {
             'accordion' => 'Accordion',
             'carousel' => 'Carousel',
         ];
-        $mform->addElement('select',
-                'config_display_type',
-                get_string('label:configdisplaytype', 'block_faq_list'),
-                $displayoptions
+        $mform->addElement(
+            'select',
+            'config_display_type',
+            get_string('label:configdisplaytype', 'block_faq_list'),
+            $displayoptions
         );
         $mform->setType('config_display_type', PARAM_ALPHANUMEXT);
         $mform->addRule('config_display_type', get_string('error:required', 'block_faq_list'), 'required', null, 'client');

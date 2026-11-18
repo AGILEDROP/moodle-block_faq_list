@@ -23,25 +23,28 @@
     {
         "show_title": true,
         "faq_title": "FAQ Block Title",
-        "faq_items": {
-            "itemnumber": 0,
-            "id": 5,
-            "question": "Question?",
-            "answer": "<p>Answer.</p>",
-        },
+        "blockid": 12,
+        "faq_items": [
+            {
+                "itemnumber": 0,
+                "id": 5,
+                "question": "Question?",
+                "answer": "<p>Answer.</p>"
+            }
+        ]
     }
 }}
 <div class="faq-wrapper">
     {{#show_title}}
-        <h2>{{faq_title}}</h2>
+        <h2>{{{faq_title}}}</h2>
     {{/show_title}}
 
-    <div id="faq-carousel" class="carousel pb-6 slide" data-ride="carousel">
-        <ol class="carousel-indicators">
+    <div id="faq-carousel-{{{blockid}}}" class="carousel pb-6 slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
             {{#faq_items}}
-                <li data-target="#faq-carousel" data-slide-to="{{itemnumber}}" class="{{^itemnumber}}active{{/itemnumber}}"></li>
+                <button type="button" data-bs-target="#faq-carousel-{{{blockid}}}" data-bs-slide-to="{{itemnumber}}" class="{{^itemnumber}}active{{/itemnumber}}" {{^itemnumber}}aria-current="true"{{/itemnumber}} aria-label="{{{question}}}"></button>
             {{/faq_items}}
-        </ol>
+        </div>
 
         <div class="carousel-inner">
           {{#faq_items}}

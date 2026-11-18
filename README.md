@@ -37,15 +37,37 @@ Accessible via **Site Administration -> General -> FAQ Lists**, the plugin offer
 - FAQ titles and items (questions and answers) can be translated into multiple languages.
 - Admin interface includes tabs for each installed language pack, making translation simple and intuitive.
 
+## Compatibility
+
+This release supports Moodle 5.0–5.3. For Moodle 4.0–4.5, choose a compatible release from the [Moodle Marketplace](https://marketplace.moodle.com/plugins/3109).
+
+See the [changelog](CHANGES.md) for release changes and upgrade notes.
+
 ## Installation
 
-1. Clone or download the repository into the appropriate Moodle directory:
+### Composer
 
-```
-git clone https://github.com/AGILEDROP/moodle-block_faq_list.git faq_list
+Once a stable release is available on Packagist, run this command from the root of your Composer-managed Moodle project:
+
+```bash
+composer require agiledrop/moodle-block_faq_list
 ```
 
-2. In Moodle, navigate to **Site Administration -> Notifications** and follow the prompts to install the plugin.
+### ZIP
+
+Choose a release compatible with your Moodle version. Open **Site administration → Plugins → Install plugins**, upload the plugin ZIP and follow the installation prompts.
+
+### Manual or Git installation
+
+Extract the plugin or check out the matching release from the [GitHub repository](https://github.com/AGILEDROP/moodle-block_faq_list) into `blocks/faq_list/` under Moodle's web root. If your project uses a `public/` web root, the path from the project root is `public/blocks/faq_list/`. The directory should contain the plugin's `version.php`.
+
+### Complete the installation
+
+After installing the files with Composer, manually or with Git, open **Site administration → Notifications**. Alternatively, run the following command from the Moodle project root:
+
+```bash
+php admin/cli/upgrade.php
+```
 
 ## Usage
 

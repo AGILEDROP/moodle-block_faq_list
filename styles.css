@@ -18,26 +18,27 @@
     font-size: 1rem;
 }
 
-.block_faq_list .accordion-header button .fa {
-    position: absolute;
-    top: calc(50% - .5em);
-    right: 1rem;
-    transition: transform ease .3s;
-}
-
-.block_faq_list .accordion-header button:not(.collapsed) .fa {
-    transform: rotate(180deg);
-}
-
 .block_faq_list .accordion-header button {
-    display: block;
+    display: flex;
+    align-items: center;
+    width: 100%;
     background: none;
     padding: 0;
     border: 0;
 }
 
+.block_faq_list .accordion-header button::after {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
 /* Slider view mode styles. */
-.block_faq_list .faq-wrapper .carousel-indicators li {
+.block_faq_list .faq-wrapper .carousel-item .card-title {
+    margin-bottom: 0;
+    padding: 1rem 1rem 0;
+}
+
+.block_faq_list .faq-wrapper .carousel-indicators button {
     background-color: #000;
 }
 

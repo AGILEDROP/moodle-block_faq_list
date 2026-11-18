@@ -31,6 +31,7 @@
             </KEYS>
             <INDEXES>
                 <INDEX NAME="id" UNIQUE="true" FIELDS="id"/>
+                <INDEX NAME="list_lang" UNIQUE="true" FIELDS="list_id, lang"/>
             </INDEXES>
         </TABLE>
 

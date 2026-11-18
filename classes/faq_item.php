@@ -42,7 +42,6 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_item extends faq_list {
-
     /**
      * Get faq list item by id.
      *
@@ -58,22 +57,6 @@ class faq_item extends faq_list {
             return $this->db->get_record($this->tableitems, $conditions);
         }
         return false;
-    }
-
-    /**
-     * Get all faq list items (questions and answers) for selected faq list and language.
-     *
-     * @param int $faqlistid Id of selected faq list.
-     * @param string $lang Selected language, default is current language.
-     * @return array Array of faq list items object.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
-     */
-    public function get_items($faqlistid, $lang = null) {
-        $conditions = [
-                'list_id' => $faqlistid,
-                'lang' => $lang,
-        ];
-        return $this->db->get_records($this->tableitems, $conditions, 'sortorder');
     }
 
     /**
@@ -96,8 +79,9 @@ class faq_item extends faq_list {
     /**
      * Create new faq list item.
      *
-     * @param stdClass $data Faq list item object.
+     * @param stdClass $data Faq list item object. Needs list_id and faq_lang next to the form values.
      * @return int|false Return id of successfully created faq list item otherwise false.
+     * @throws \moodle_exception If the target list no longer exists.
      * @throws dml_exception
      */
     public function create($data) {
@@ -106,19 +90,33 @@ class faq_item extends faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqlistid = $this->helper->get_last_edit_faq_list_id();
-        $faqlang = $this->helper->get_last_edit_faq_lang();
-        $itemcount = $this->count_items($faqlistid, $faqlang);
+        $faqlistid = (int)$data->list_id;
+        $faqlang = (string)$data->faq_lang;
 
-        $faqitemdata = new stdClass();
-        $faqitemdata->list_id = $faqlistid;
-        $faqitemdata->lang = $faqlang;
-        $faqitemdata->question = $data->question;
-        $faqitemdata->answer = $data->answer['text'];
-        $faqitemdata->answer_format = $data->answer['format'];
-        $faqitemdata->sortorder = $itemcount + 1;
+        return helper::run_locked_transaction($faqlistid, function () use ($faqlistid, $faqlang, $data) {
+            // List deletion takes the same lock, so an item can't be added to a list that was just deleted.
+            if (!$this->db->record_exists($this->tablelists, ['id' => $faqlistid])) {
+                throw new \moodle_exception('msgfaqlistnotexist', 'block_faq_list');
+            }
 
-        return $this->db->insert_record($this->tableitems, $faqitemdata, true);
+            // Next position is calculated under the lock, so concurrent creates cannot get the same one.
+            $maxsortorder = (int)$this->db->get_field_select(
+                $this->tableitems,
+                'MAX(sortorder)',
+                'list_id = :listid AND lang = :lang',
+                ['listid' => $faqlistid, 'lang' => $faqlang]
+            );
+
+            $faqitemdata = new stdClass();
+            $faqitemdata->list_id = $faqlistid;
+            $faqitemdata->lang = $faqlang;
+            $faqitemdata->question = $data->question;
+            $faqitemdata->answer = $data->answer['text'];
+            $faqitemdata->answer_format = $data->answer['format'];
+            $faqitemdata->sortorder = $maxsortorder + 1;
+
+            return $this->db->insert_record($this->tableitems, $faqitemdata, true);
+        });
     }
 
     /**
@@ -126,7 +124,7 @@ class faq_item extends faq_list {
      *
      * @param stdClass $data Faq list item object.
      * @return bool True.
-     * @throws dml_exception A DML specific exception is thrown for any errors.
+     * @throws \moodle_exception If the item no longer exists.
      */
     public function update($data) {
         require_sesskey();
@@ -134,13 +132,25 @@ class faq_item extends faq_list {
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqitemdata = new stdClass();
-        $faqitemdata->id = $data->id;
-        $faqitemdata->question = $data->question;
-        $faqitemdata->answer = $data->answer['text'];
-        $faqitemdata->answer_format = $data->answer['format'];
+        $existing = $this->get_by_id($data->id);
+        if (!$existing) {
+            throw new \moodle_exception('msgfaqitemnotexist', 'block_faq_list');
+        }
 
-        return $this->db->update_record($this->tableitems, $faqitemdata);
+        return helper::run_locked_transaction((int)$existing->list_id, function () use ($data) {
+            // Re-check under the lock: the item may have been deleted since the unlocked read.
+            if (!$this->db->record_exists($this->tableitems, ['id' => $data->id])) {
+                throw new \moodle_exception('msgfaqitemnotexist', 'block_faq_list');
+            }
+
+            $faqitemdata = new stdClass();
+            $faqitemdata->id = $data->id;
+            $faqitemdata->question = $data->question;
+            $faqitemdata->answer = $data->answer['text'];
+            $faqitemdata->answer_format = $data->answer['format'];
+
+            return $this->db->update_record($this->tableitems, $faqitemdata);
+        });
     }
 
     /**
@@ -157,70 +167,113 @@ class faq_item extends faq_list {
         require_capability('block/faq_list:delete', $context);
 
         $faqitem = $this->get_by_id($faqitemid);
-        $sortorder = $faqitem->sortorder;
-
-        $this->db->delete_records($this->tableitems, ['id' => $faqitem->id]);
-        $faqitems = $this->get_items($faqitem->list_id, $faqitem->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder > $sortorder) {
-                $faqitem->sortorder = $faqitem->sortorder - 1;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
+        if (!$faqitem) {
+            return;
         }
+
+        helper::run_locked_transaction($faqitem->list_id, function () use ($faqitemid) {
+            // Re-read under the lock: the position may have changed since the unlocked read.
+            $faqitem = $this->get_by_id($faqitemid);
+            if (!$faqitem) {
+                return;
+            }
+
+            $this->db->delete_records($this->tableitems, ['id' => $faqitem->id]);
+
+            // Close the gap with a single statement instead of updating each row separately.
+            $this->db->execute(
+                "UPDATE {{$this->tableitems}}
+                    SET sortorder = sortorder - 1
+                  WHERE list_id = :listid
+                    AND lang = :lang
+                    AND sortorder > :sortorder",
+                [
+                    'listid' => $faqitem->list_id,
+                    'lang' => $faqitem->lang,
+                    'sortorder' => $faqitem->sortorder,
+                ]
+            );
+        });
     }
 
     /**
      * Move down faq list item (change sort-order of faq list items).
      *
+     * Does nothing if the item is already last in its list and language.
+     *
      * @param int $faqitemid Id of selected faq list item.
-     * @return void
+     * @return bool True if the item was moved, false otherwise.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function movedown($faqitemid) {
-        require_sesskey();
-
-        $context = \context_system::instance();
-        require_capability('block/faq_list:createormodify', $context);
-
-        $faqitemselected = $this->get_by_id($faqitemid);
-        $sortorder = $faqitemselected->sortorder;
-        $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder == $sortorder + 1) {
-                $faqitem->sortorder = $sortorder;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
-        }
-        $faqitemselected->sortorder = $sortorder + 1;
-        $this->db->update_record($this->tableitems, $faqitemselected);
+        return $this->move($faqitemid, true);
     }
 
     /**
      * Move up faq list item (change sort-order of faq list items).
      *
+     * Does nothing if the item is already first in its list and language.
+     *
      * @param int $faqitemid Id of selected faq list item.
-     * @return void
+     * @return bool True if the item was moved, false otherwise.
      * @throws dml_exception A DML specific exception is thrown for any errors.
      */
     public function moveup($faqitemid) {
+        return $this->move($faqitemid, false);
+    }
+
+    /**
+     * Swap sort-order with the adjacent item in the same list and language.
+     *
+     * @param int $faqitemid Id of selected faq list item.
+     * @param bool $down True to move down, false to move up.
+     * @return bool True if the item was moved, false if no adjacent item exists.
+     * @throws dml_exception A DML specific exception is thrown for any errors.
+     */
+    private function move($faqitemid, $down) {
         require_sesskey();
 
         $context = \context_system::instance();
         require_capability('block/faq_list:createormodify', $context);
 
-        $faqitemselected = $this->get_by_id($faqitemid);
-        $sortorder = $faqitemselected->sortorder;
-        $faqitems = $this->get_items($faqitemselected->list_id, $faqitemselected->lang);
-
-        foreach ($faqitems as $faqitem) {
-            if ($faqitem->sortorder == $sortorder - 1) {
-                $faqitem->sortorder = $sortorder;
-                $this->db->update_record($this->tableitems, $faqitem);
-            }
+        $selected = $this->get_by_id($faqitemid);
+        if (!$selected) {
+            return false;
         }
-        $faqitemselected->sortorder = $sortorder - 1;
-        $this->db->update_record($this->tableitems, $faqitemselected);
+
+        return helper::run_locked_transaction($selected->list_id, function () use ($faqitemid, $down) {
+            // Re-read under the lock so the neighbour is found from current positions.
+            $selected = $this->get_by_id($faqitemid);
+            if (!$selected) {
+                return false;
+            }
+
+            $operator = $down ? '>' : '<';
+            $direction = $down ? 'ASC' : 'DESC';
+            $sql = "SELECT *
+                      FROM {{$this->tableitems}}
+                     WHERE list_id = :listid
+                       AND lang = :lang
+                       AND sortorder $operator :sortorder
+                  ORDER BY sortorder $direction, id $direction";
+            $params = [
+                'listid' => $selected->list_id,
+                'lang' => $selected->lang,
+                'sortorder' => $selected->sortorder,
+            ];
+            $adjacent = $this->db->get_records_sql($sql, $params, 0, 1);
+            if (!$adjacent) {
+                return false;
+            }
+            $adjacent = reset($adjacent);
+
+            $selectedsortorder = $selected->sortorder;
+            $selected->sortorder = $adjacent->sortorder;
+            $adjacent->sortorder = $selectedsortorder;
+            $this->db->update_record($this->tableitems, $selected);
+            $this->db->update_record($this->tableitems, $adjacent);
+
+            return true;
+        });
     }
 }

@@ -50,7 +50,7 @@ $faqitem = new faq_item();
 $action = optional_param('action', null, PARAM_ALPHA);
 
 $faqlistid = optional_param('list_id', null, PARAM_INT);
-$faqlang = optional_param('faq_lang', null, PARAM_ALPHA);
+$faqlang = optional_param('faq_lang', null, PARAM_ALPHANUMEXT);
 $faqitemid = optional_param('faq_item_id', null, PARAM_INT);
 
 if ($faqlistid) {
@@ -96,15 +96,21 @@ $PAGE->set_heading($header);
 
 echo $OUTPUT->header();
 
+// Controls follow the user's capabilities. The server still checks them on every action.
+$canmodify = has_capability('block/faq_list:createormodify', $context);
+$candelete = has_capability('block/faq_list:delete', $context);
+
 $table = new html_table();
 
-$table->head = [
-    get_string('label:colfaqitem', 'block_faq_list'),
-    get_string('label:moveitemdown', 'block_faq_list'),
-    get_string('label:moveitemup', 'block_faq_list'),
-    get_string('label:colactionedit', 'block_faq_list'),
-    get_string('label:colactiondelete', 'block_faq_list'),
-];
+$table->head = [get_string('label:colfaqitem', 'block_faq_list')];
+if ($canmodify) {
+    $table->head[] = get_string('label:moveitemdown', 'block_faq_list');
+    $table->head[] = get_string('label:moveitemup', 'block_faq_list');
+    $table->head[] = get_string('label:colactionedit', 'block_faq_list');
+}
+if ($candelete) {
+    $table->head[] = get_string('label:colactiondelete', 'block_faq_list');
+}
 
 $rows = [];
 $records = $faqitem->get_items($currentlistid, $currentfaqlang);
@@ -124,7 +130,7 @@ foreach ($records as $id => $record) {
     $viewurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', $urlparam);
 
     // Moving an item down.
-    if ($i < $faqitemscount) {
+    if ($canmodify && $i < $faqitemscount) {
         $formdown = new faq_item_move_form(null, [
             'faq_item_id' => $record->id,
             'action' => 'moveitemdown',
@@ -133,7 +139,7 @@ foreach ($records as $id => $record) {
     }
 
     // Moving an item up.
-    if ($i > 1) {
+    if ($canmodify && $i > 1) {
         $formup = new faq_item_move_form(null, [
             'faq_item_id' => $record->id,
             'action' => 'moveitemup',
@@ -143,26 +149,40 @@ foreach ($records as $id => $record) {
 
     // Link to edit faq item.
     $editlink = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', $urlparam);
-    $editicon = $OUTPUT->action_icon($editlink,
-        new \pix_icon('t/edit', get_string('button:editfaqitem', 'block_faq_list')));
+    $editicon = $OUTPUT->action_icon(
+        $editlink,
+        new \pix_icon('t/edit', get_string('button:editfaqitem', 'block_faq_list'))
+    );
 
     // Link to delete faq item.
     $params = array_merge($urlparam, ['action' => 'deleteitem']);
     $deletelink = new moodle_url('/blocks/faq_list/view/faq_item_delete.php', $params);
-    $deleteicon = $OUTPUT->action_icon($deletelink,
-        new \pix_icon('t/delete', get_string('button:deletefaqitem', 'block_faq_list')));
+    $deleteicon = $OUTPUT->action_icon(
+        $deletelink,
+        new \pix_icon('t/delete', get_string('button:deletefaqitem', 'block_faq_list'))
+    );
 
     $faqitemtext = '';
-    $faqitemtext .= html_writer::tag('h5', $record->question, []);
-    $faqitemtext .= html_writer::tag('div', $record->answer, []);
+    $faqitemtext .= html_writer::tag(
+        'h5',
+        format_string($record->question ?? '', true, ['context' => context_system::instance()]),
+        []
+    );
+    $faqitemtext .= html_writer::tag('div', format_text(
+        $record->answer ?? '',
+        $record->answer_format ?? FORMAT_HTML,
+        ['context' => context_system::instance()]
+    ), []);
 
-    $row = [
-        $faqitemtext,
-        $movedownicon,
-        $moveupicon,
-        $editicon,
-        $deleteicon,
-    ];
+    $row = [$faqitemtext];
+    if ($canmodify) {
+        $row[] = $movedownicon;
+        $row[] = $moveupicon;
+        $row[] = $editicon;
+    }
+    if ($candelete) {
+        $row[] = $deleteicon;
+    }
     $rows[] = $row;
 }
 
@@ -175,7 +195,7 @@ echo html_writer::tag('hr', '', []);
 $faqtitletext = get_string('header:faqtitle', 'block_faq_list');
 $faqtitletext .= ': ';
 if ($currentfaqlisttitle) {
-    $faqtitletext .= $currentfaqlisttitle->title;
+    $faqtitletext .= format_string($currentfaqlisttitle->title, true, ['context' => context_system::instance()]);
 } else {
     $faqtitletext .= '/';
 }
@@ -183,16 +203,26 @@ if ($currentfaqlisttitle) {
 echo html_writer::start_div('d-flex');
 echo html_writer::tag('h2', $faqtitletext, []);
 echo html_writer::start_div('ml-2');
-if ($currentfaqlisttitle) {
+// Read-only users see the title but get no add or edit button.
+if ($canmodify && $currentfaqlisttitle) {
     $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php', ['faq_title_id' => $currentfaqlisttitle->id]);
-    echo $OUTPUT->single_button($actionurl,
-        get_string('button:editfaqtitle', 'block_faq_list'), 'POST', ['type' => 'secondary']);
-
-} else {
-    $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php');
-    echo $OUTPUT->single_button($actionurl,
-        get_string('button:addfaqtitle', 'block_faq_list'), 'POST', ['type' => 'primary']);
-
+    echo $OUTPUT->single_button(
+        $actionurl,
+        get_string('button:editfaqtitle', 'block_faq_list'),
+        'POST',
+        ['type' => 'secondary']
+    );
+} else if ($canmodify) {
+    $actionurl = new moodle_url('/blocks/faq_list/view/faq_list_title.php', [
+        'list_id' => $currentlistid,
+        'faq_lang' => $currentfaqlang,
+    ]);
+    echo $OUTPUT->single_button(
+        $actionurl,
+        get_string('button:addfaqtitle', 'block_faq_list'),
+        'POST',
+        ['type' => 'primary']
+    );
 }
 echo html_writer::end_div();
 echo html_writer::end_div();
@@ -202,12 +232,25 @@ echo $OUTPUT->tabtree($tabs, 'faq_lang_' . $faqitem->helper->get_last_edit_faq_l
 
 echo html_writer::table($table);
 
-$actionurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php');
-echo $OUTPUT->single_button($actionurl,
-    get_string('button:addfaqitem', 'block_faq_list'), 'POST', ['type' => 'primary']);
+$actionurl = new moodle_url('/blocks/faq_list/view/faq_item_manage.php', [
+    'list_id' => $currentlistid,
+    'faq_lang' => $currentfaqlang,
+]);
+if ($canmodify) {
+    echo $OUTPUT->single_button(
+        $actionurl,
+        get_string('button:addfaqitem', 'block_faq_list'),
+        'POST',
+        ['type' => 'primary']
+    );
+}
 
 $actionurl = new moodle_url('/blocks/faq_list/view/faq_lists.php');
-echo $OUTPUT->single_button($actionurl,
-    get_string('button:backtofaqlist', 'block_faq_list'), 'POST', ['type' => 'secondary']);
+echo $OUTPUT->single_button(
+    $actionurl,
+    get_string('button:backtofaqlist', 'block_faq_list'),
+    'POST',
+    ['type' => 'secondary']
+);
 
 echo $OUTPUT->footer();

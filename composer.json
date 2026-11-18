@@ -1,0 +1,17 @@
+{
+  "name": "agiledrop/moodle-block_faq_list",
+  "description": "FAQ list block for Moodle",
+  "type": "moodle-block",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Agiledrop ltd.",
+      "email": "hello@agiledrop.com"
+    }
+  ],
+  "require": {
+    "moodle/moodle": ">=5.0 <5.4",
+    "moodle/composer-installer": "*"
+  }
+}

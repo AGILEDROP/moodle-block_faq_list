@@ -42,7 +42,6 @@ use moodleform;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_list_title_form extends moodleform {
-
     /**
      * Form definitions.
      *
@@ -55,6 +54,14 @@ class faq_list_title_form extends moodleform {
         // Existing faq_title id.
         $mform->addElement('hidden', 'id', 0);
         $mform->setType('id', PARAM_INT);
+
+        // Target faq list and language, fixed when the form is opened. Reading them from the session
+        // on submit would let a form opened in one tab save into whatever list or language another
+        // tab switched to in the meantime.
+        $mform->addElement('hidden', 'list_id', 0);
+        $mform->setType('list_id', PARAM_INT);
+        $mform->addElement('hidden', 'faq_lang', '');
+        $mform->setType('faq_lang', PARAM_ALPHANUMEXT);
 
         // Translated title.
         $mform->addElement('text', 'title', get_string('label:faqtitle', 'block_faq_list'));
@@ -75,6 +82,19 @@ class faq_list_title_form extends moodleform {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
+
+        // Only one title per faq list and language. Editing an existing title keeps its language.
+        if (empty($data['id'])) {
+            $faqlist = new \block_faq_list\faq_list();
+            $lang = $data['faq_lang'] ?? '';
+            if (empty($data['list_id']) || !$faqlist->get_by_id($data['list_id'])) {
+                $errors['title'] = get_string('msgfaqlistnotexist', 'block_faq_list');
+            } else if (!isset(get_string_manager()->get_list_of_translations()[$lang])) {
+                $errors['title'] = get_string('invalidlanguagecode', 'error', s($lang));
+            } else if ($faqlist->get_title($data['list_id'], $lang)) {
+                $errors['title'] = get_string('error:titleexists', 'block_faq_list');
+            }
+        }
 
         return $errors;
     }

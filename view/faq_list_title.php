@@ -49,55 +49,67 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('admin');
 
 $faqlist = new faq_list();
-$faqtitleform = new faq_list_title_form();
+$faqtitleid = optional_param('faq_title_id', 0, PARAM_INT) ?: optional_param('id', 0, PARAM_INT);
+$listsurl = new moodle_url('/blocks/faq_list/view/faq_lists.php');
 
-$faqtitleid = optional_param('faq_title_id', null, PARAM_INT);
+if ($faqtitleid) {
+    $existingfaqtitle = $faqlist->get_title_by_id($faqtitleid);
+    if (!$existingfaqtitle) {
+        redirect($listsurl, get_string('msgfaqtitlenotexist', 'block_faq_list'), 0, notification::NOTIFY_ERROR);
+    }
+    $listid = (int)$existingfaqtitle->list_id;
+    $lang = $existingfaqtitle->lang;
+} else {
+    $listid = optional_param('list_id', 0, PARAM_INT);
+    $lang = optional_param('faq_lang', '', PARAM_ALPHANUMEXT);
+}
+
+if (!$listid || !$faqlist->get_by_id($listid)) {
+    redirect($listsurl, get_string('msgfaqlistnotexist', 'block_faq_list'), 0, notification::NOTIFY_ERROR);
+}
+
+$redirecturl = new moodle_url('/blocks/faq_list/view/faq_list_items.php', [
+    'list_id' => $listid,
+    'faq_lang' => $lang,
+]);
+$faqtitleform = new faq_list_title_form();
+$faqtitleform->set_data([
+    'id' => $faqtitleid,
+    'title' => $existingfaqtitle->title ?? '',
+    'list_id' => $listid,
+    'faq_lang' => $lang,
+]);
 
 $header = get_string('header:faqtitlemanagement', 'block_faq_list');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 
-$redirecturl  = new moodle_url('/blocks/faq_list/view/faq_list_items.php', []);
-
-
 if ($faqtitleform->is_cancelled()) {
-    // Redirect to list of faq lists.
     redirect($redirecturl);
 } else if ($data = $faqtitleform->get_data()) {
-    // Validation.
-    if ($data->id) {
-        $faqlist->update_title_translation($data->id, $data->title);
-        redirect($redirecturl,
-            get_string('msgfaqtitleupdated', 'block_faq_list'),
-            0,
-            notification::NOTIFY_SUCCESS);
-    } else {
-        $faqlist->add_title_translation($faqlist->helper->get_last_edit_faq_list_id(), $data->title);
-        redirect($redirecturl,
-            get_string('msgfaqtitlecreated', 'block_faq_list'),
-            0,
-            notification::NOTIFY_SUCCESS);
-    }
-}
-
-if ($faqtitleid) {
-    $existingfaqtitle = $faqlist->get_title_by_id($faqtitleid);
-
-    $data = new stdClass();
-    $data->id = $existingfaqtitle->id;
-    $data->title = $existingfaqtitle->title;
-
-    if ($existingfaqtitle) {
-        $faqtitleform->set_data($data);
-    } else {
-        redirect($redirecturl,
-            get_string('msgfaqtitlenotexist', 'block_faq_list'),
+    try {
+        if ($faqtitleid) {
+            // The stored record decides which title is saved, not the submitted hidden values.
+            $faqlist->update_title_translation($faqtitleid, $data->title);
+            $message = get_string('msgfaqtitleupdated', 'block_faq_list');
+        } else {
+            $faqlist->add_title_translation($data->list_id, $data->title, $data->faq_lang);
+            $message = get_string('msgfaqtitlecreated', 'block_faq_list');
+        }
+    } catch (moodle_exception $e) {
+        $expectederrors = ['error:titleexists', 'error:locktimeout', 'msgfaqlistnotexist', 'msgfaqtitlenotexist'];
+        if ($e->module !== 'block_faq_list' || !in_array($e->errorcode, $expectederrors, true)) {
+            throw $e;
+        }
+        redirect(
+            in_array($e->errorcode, ['msgfaqlistnotexist', 'msgfaqtitlenotexist']) ? $listsurl : $redirecturl,
+            $e->getMessage(),
             0,
             notification::NOTIFY_ERROR
         );
     }
+    redirect($redirecturl, $message, 0, notification::NOTIFY_SUCCESS);
 }
-
 
 echo $OUTPUT->header();
 
